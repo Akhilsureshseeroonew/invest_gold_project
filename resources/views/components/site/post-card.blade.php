@@ -10,15 +10,16 @@
         'security' => 'shield', 'safety' => 'shield',
     ];
     $icon = $catIcons[\Illuminate\Support\Str::lower(trim((string) $post->category))] ?? 'doc';
+    $thumb = $post->cover_image ?: $post->banner_image;
 @endphp
 
 <article class="card news" data-reveal="zoom">
     <div class="news__media">
-        @if ($post->cover_image)
-            <img class="news__img" src="{{ \App\Support\Assets::url($post->cover_image) }}" alt="" loading="lazy">
+        @if ($thumb)
+            <img class="news__img" src="{{ \App\Support\Assets::url($thumb) }}" alt="" loading="lazy">
         @endif
         <span class="news__date">{{ $post->category ?: 'Article' }}</span>
-        @unless ($post->cover_image)
+        @unless ($thumb)
             <svg width="62" height="62"><use href="#i-{{ $icon }}"/></svg>
         @endunless
     </div>

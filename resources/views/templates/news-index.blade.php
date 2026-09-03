@@ -18,14 +18,15 @@
                 @php
                     $icon = ['news' => 'building', 'event' => 'calendar', 'media' => 'award'][$item->kind] ?? 'building';
                     $date = $item->event_date ?: $item->published_at;
+                    $thumb = $item->cover_image ?: $item->banner_image;
                 @endphp
                 <article class="card news" data-reveal="zoom">
                     <div class="news__media">
-                        @if ($item->cover_image)
-                            <img class="news__img" src="{{ \App\Support\Assets::url($item->cover_image) }}" alt="" loading="lazy">
+                        @if ($thumb)
+                            <img class="news__img" src="{{ \App\Support\Assets::url($thumb) }}" alt="" loading="lazy">
                         @endif
                         <span class="news__date">{{ $date?->format('d M Y') ?: ucfirst($item->kind) }}</span>
-                        @unless ($item->cover_image)
+                        @unless ($thumb)
                             <svg width="62" height="62"><use href="#i-{{ $icon }}"/></svg>
                         @endunless
                     </div>

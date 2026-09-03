@@ -117,6 +117,25 @@ class PublicSiteTest extends TestCase
         }
     }
 
+    public function test_a_single_uploaded_image_serves_both_the_listing_card_and_the_inner_banner(): void
+    {
+        // News item with ONLY a banner image (no separate card thumbnail)
+        $news = NewsItem::first();
+        $news->update(['cover_image' => null, 'banner_image' => 'news/banners/only-image.jpg']);
+        $this->get('/news')->assertOk()
+            ->assertSee('news/banners/only-image.jpg');            // shows on the listing card
+        $this->get('/news/'.$news->slug)->assertOk()
+            ->assertSee('news/banners/only-image.jpg');            // and on the inner banner
+
+        // Blog post with ONLY a banner image
+        $post = Post::first();
+        $post->update(['cover_image' => null, 'banner_image' => 'blog/banners/only-image.jpg']);
+        $this->get('/blog')->assertOk()
+            ->assertSee('blog/banners/only-image.jpg');
+        $this->get('/blog/'.$post->slug)->assertOk()
+            ->assertSee('blog/banners/only-image.jpg');
+    }
+
     public function test_unpublished_post_is_404(): void
     {
         $post = Post::first();

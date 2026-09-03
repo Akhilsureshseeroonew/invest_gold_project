@@ -35,18 +35,12 @@ class NewsItemForm
                 TextInput::make('slug')->required()->rule('alpha_dash')->columnSpanFull(),
             ]),
             Textarea::make('summary')->rows(2)->columnSpanFull(),
-            Grid::make(2)->schema([
-                FileUpload::make('cover_image')
-                    ->label('Card thumbnail')
-                    ->helperText('Shown on the News listing card. Optional — a themed icon shows if empty.')
-                    ->image()->imageEditor()
-                    ->disk('public')->directory('news')->visibility('public'),
-                FileUpload::make('banner_image')
-                    ->label('Banner image (article page)')
-                    ->helperText('Wide image at the top of the article. Optional — falls back to the card thumbnail, then a themed placeholder.')
-                    ->image()->imageEditor()->imageEditorAspectRatios(['16:9', '3:1'])
-                    ->disk('public')->directory('news/banners')->visibility('public'),
-            ]),
+            FileUpload::make('banner_image')
+                ->label('Image')
+                ->helperText('Used as the banner at the top of the article and as the thumbnail on the News listing card. Optional — a themed icon shows if left empty.')
+                ->image()->imageEditor()->imageEditorAspectRatios(['16:9', '3:1', '4:3'])
+                ->disk('public')->directory('news/banners')->visibility('public')
+                ->columnSpanFull(),
             RichEditor::make('body')
                 ->fileAttachmentsDisk('public')
                 ->fileAttachmentsDirectory('news/inline')
