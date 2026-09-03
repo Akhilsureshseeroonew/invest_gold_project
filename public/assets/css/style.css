@@ -604,7 +604,7 @@ p {
 .nav {
     position: sticky;
     top: 0;
-    z-index: 55;
+    z-index: 1000;
     background: var(--bg); /* fallback where color-mix is unsupported */
     background: color-mix(in srgb, var(--bg) 78%, transparent);
     border-bottom: 1px solid var(--border-soft);
@@ -1558,6 +1558,9 @@ p {
     box-shadow: var(--shadow);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    width: 650px;
+    max-width: 100%;
+    margin: 0 auto;
 }
 .switch {
     position: relative;
@@ -2735,27 +2738,35 @@ input[type="range"]::-moz-range-thumb {
     .why {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+/* mobile nav takes over below 991px */
+@media (max-width: 991px) {
     .nav__links {
         display: none;
     }
     .nav__burger {
         display: block;
     }
+    .nav__cta {
+        width: 100%;
+        justify-content: space-between;
+    }
 }
 @media (max-width: 1024px) {
     .hero__inner {
         grid-template-columns: 1fr;
-        text-align: center;
+        text-align: left;
     }
-    .hero__lead {
+    /* .hero__lead {
         margin-inline: auto;
-    }
+    } */
     .hero__cta,
     .eyebrow {
-        justify-content: center;
+        justify-content: start;
     }
     .hero__cta {
-        justify-content: center;
+        justify-content: start;
     }
     .hero__visual {
         order: -1;
@@ -2765,6 +2776,7 @@ input[type="range"]::-moz-range-thumb {
     .app,
     .enquiry {
         grid-template-columns: 1fr;
+        display: block;
     }
     .calc__mascot {
         max-width: 420px;
@@ -2778,6 +2790,15 @@ input[type="range"]::-moz-range-thumb {
     }
     .footer__grid {
         grid-template-columns: 1fr 1fr;
+    }
+    .hero__visual {
+        display: none;
+    }
+    #why::before {
+        right: -70px;
+    }
+    .section {
+        overflow: hidden;
     }
 }
 @media (max-width: 760px) {
@@ -2871,7 +2892,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* mobile nav drawer */
-@media (max-width: 1180px) {
+@media (max-width: 991px) {
     .nav__links {
         position: absolute;
         top: 100%;
@@ -3675,7 +3696,7 @@ table.rates {
 }
 
 /* ---- inner-page responsive ---- */
-@media (max-width: 1180px) {
+@media (max-width: 991px) {
     /* drawer: sub-menus flow inline */
     .subnav {
         position: static;
@@ -4154,4 +4175,36 @@ input:disabled,
 #why > .container {
     position: relative;
     z-index: 1;
+}
+
+/* between the mobile breakpoint and full desktop the nav is tight:
+   trim type, padding and gaps so all nine links stay on one line */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .nav__inner {
+        gap: 0.6rem;
+    }
+    .nav__links {
+        gap: 0.05rem;
+    }
+    .nav__links a {
+        padding: 0.5rem 0.48rem;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+    .nav__links a:hover::after,
+    .nav__links a.is-active::after {
+        width: calc(100% - 0.96rem);
+    }
+    .nav__cta .btn {
+        padding: 0.5rem 0.9rem;
+        font-size: 0.78rem;
+        white-space: nowrap;
+    }
+}
+
+/* page-hero artwork is dropped below 1024px */
+@media (max-width: 1024px) {
+    .pagehero__art {
+        display: none;
+    }
 }
