@@ -165,7 +165,7 @@ class PageForm
                     Textarea::make('seo_description')->rows(3),
                     FileUpload::make('og_image')
                         ->image()
-                        ->directory('pages/og')
+                        ->disk('public')->directory('pages/og')->visibility('public')
                         ->helperText('Social share image.'),
                 ]),
 

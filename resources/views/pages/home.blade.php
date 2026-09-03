@@ -4,53 +4,7 @@
 @section('meta_description', ($page->seo_description ?? null) ?: "Kerala's trusted, RBI-registered NBFC since 1996. Instant gold, personal, Mahila & consumer loans - trusted by 10,000+ customers.")
 @section('meta_keywords', 'gold loan Kerala, personal loan Thrissur, Mahila loan, consumer loan, NCD investment, subordinated debt, NBFC Kerala')
 
-@push('head')
-<style>
-  /* Hero background video */
-  .hero { background-color: #070c1f; }
-  .hero__video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-    pointer-events: none;
-  }
-  .hero__video-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background:
-      linear-gradient(180deg, rgba(7, 12, 31, 0.70) 0%, rgba(7, 12, 31, 0.48) 45%, rgba(7, 12, 31, 0.88) 100%),
-      linear-gradient(90deg, rgba(7, 12, 31, 0.92) 0%, rgba(7, 12, 31, 0.38) 60%, rgba(7, 12, 31, 0.12) 100%);
-  }
-  .hero::before,
-  .hero::after { z-index: 1; }
-  .hero__inner { position: relative; z-index: 2; }
 
-  /* Keep hero copy readable on the video in either colour theme */
-  .hero .eyebrow,
-  .hero h1,
-  .hero .hero__lead { color: #fff; }
-  .hero .badge {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(255, 255, 255, 0.16);
-  }
-  .hero .badge b,
-  .hero .badge span { color: #fff; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero__video { display: none; }
-  }
-
-  /* Hide the mascot medallion + orbiting product links; the video is the visual now */
-  .hero__visual { display: none; }
-  .hero__inner { grid-template-columns: 1fr; }
-  .hero__copy { max-width: 46rem; }
-</style>
-@endpush
 
 @section('content')
       <!-- ================= 03. HERO ================= -->
@@ -149,9 +103,7 @@
                   />
                 </div>
                 <span class="medallion__shine" aria-hidden="true"></span>
-                <span class="crown-orbit" aria-hidden="true"
-                  ><i></i><i></i><i></i><i></i><i></i
-                ></span>
+                
               </div>
 
               <div class="orbit__items">
@@ -164,7 +116,7 @@
                     ><svg><use href="#i-coin" /></svg
                   ></span>
                   <span class="orbit__label"
-                    ><svg class="orbit__crown"><use href="#i-crown" /></svg>Gold
+                    >Gold
                     Loan</span
                   >
                 </a>
@@ -177,7 +129,6 @@
                     ><svg><use href="#i-wallet" /></svg
                   ></span>
                   <span class="orbit__label"
-                    ><svg class="orbit__crown"><use href="#i-crown" /></svg
                     >Personal Loan</span
                   >
                 </a>
@@ -190,7 +141,6 @@
                     ><svg><use href="#i-tv" /></svg
                   ></span>
                   <span class="orbit__label"
-                    ><svg class="orbit__crown"><use href="#i-crown" /></svg
                     >Consumer Loan</span
                   >
                 </a>
@@ -203,7 +153,6 @@
                     ><svg><use href="#i-female" /></svg
                   ></span>
                   <span class="orbit__label"
-                    ><svg class="orbit__crown"><use href="#i-crown" /></svg
                     >Mahila Loan</span
                   >
                 </a>

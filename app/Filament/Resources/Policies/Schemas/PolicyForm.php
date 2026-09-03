@@ -35,7 +35,7 @@ class PolicyForm
             ]),
             FileUpload::make('file_path')
                 ->label('PDF file')
-                ->directory('policies')
+                ->disk('public')->directory('policies')->visibility('public')
                 ->acceptedFileTypes(['application/pdf'])
                 ->downloadable()
                 // Seeded policies point at files under public/assets/docs/, which
