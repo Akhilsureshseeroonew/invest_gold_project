@@ -36,12 +36,13 @@ return [
     'footer_address_heading' => 'Head Office',
     'footer_legal_line'      => 'RBI-Registered NBFC · CIN & registration details available on request',
 
+    // Full profile URLs, set in admin (Site Settings → Social). null = icon hidden.
     'social' => [
-        'facebook'  => '#',
-        'instagram' => '#',
-        'youtube'   => '#',
-        'linkedin'  => '#',
-        'x'         => '#',
+        'facebook'  => null,
+        'instagram' => null,
+        'youtube'   => null,
+        'linkedin'  => null,
+        'x'         => null,
     ],
 
     'footer_about' => 'An RBI-registered NBFC serving Kerala since 1996 — gold loans, '

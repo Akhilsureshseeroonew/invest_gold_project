@@ -136,6 +136,56 @@ class PublicSiteTest extends TestCase
             ->assertSee('blog/banners/only-image.jpg');
     }
 
+    public function test_social_links_added_in_admin_render_as_working_links_everywhere(): void
+    {
+        // what a saved Site Settings form leaves in config() for the next request:
+        // one full URL, one without a scheme, one placeholder, one blank
+        config([
+            'site.social.facebook'  => 'https://facebook.com/investgold',
+            'site.social.instagram' => 'instagram.com/investgold',
+            'site.social.youtube'   => '#',
+            'site.social.linkedin'  => null,
+        ]);
+
+        $html = $this->get('/')->assertOk()->getContent();
+
+        // only the two platforms with a link set show an icon — 3 spots each
+        // (header, footer, side-mascot); Instagram had https:// prepended
+        $this->assertSame(3, substr_count($html, 'href="https://facebook.com/investgold"'));
+        $this->assertSame(3, substr_count($html, 'href="https://instagram.com/investgold"'));
+
+        // the platforms with no link ("#" youtube, blank linkedin, unset x) show no icon at all
+        $this->assertStringNotContainsString('#i-youtube', $html);
+        $this->assertStringNotContainsString('#i-linkedin', $html);
+        $this->assertStringNotContainsString('#i-x"', $html);
+        $this->assertStringNotContainsString('aria-label="YouTube"', $html);
+    }
+
+    public function test_no_social_links_hides_the_icon_rows_and_side_mascot(): void
+    {
+        config([
+            'site.social.facebook' => null, 'site.social.instagram' => null,
+            'site.social.youtube' => null, 'site.social.linkedin' => null, 'site.social.x' => null,
+        ]);
+
+        $html = $this->get('/')->assertOk()->getContent();
+
+        $this->assertStringNotContainsString('#i-facebook', $html);
+        $this->assertStringNotContainsString('id="sideMascot"', $html);   // mascot hidden when nothing to show
+    }
+
+    public function test_normalize_url_helper(): void
+    {
+        $n = fn ($v) => \App\Support\Site::normalizeUrl($v);
+        $this->assertSame('https://facebook.com/x', $n('facebook.com/x'));
+        $this->assertSame('https://x.com/y', $n('  https://x.com/y  '));
+        $this->assertSame('https://www.youtube.com/@z', $n('www.youtube.com/@z'));
+        $this->assertNull($n('#'));
+        $this->assertNull($n(''));
+        $this->assertNull($n(null));
+        $this->assertSame('/contact', $n('/contact'));
+    }
+
     public function test_unpublished_post_is_404(): void
     {
         $post = Post::first();

@@ -26,13 +26,10 @@
             </a>
             <span class="topbar__sep"></span>
             <nav class="social" aria-label="Social media">
-                @foreach (['facebook' => 'Facebook', 'instagram' => 'Instagram', 'youtube' => 'YouTube', 'linkedin' => 'LinkedIn', 'x' => 'X'] as $key => $label)
-                    @if ($url = config("site.social.$key"))
-                        <a href="{{ $url }}" aria-label="{{ $label }}"
-                           @if ($url !== '#') target="_blank" rel="noopener" @endif>
-                            <svg><use href="#i-{{ $key }}"/></svg>
-                        </a>
-                    @endif
+                @foreach (\App\Support\Site::socialLinks() as $social)
+                    <a href="{{ $social['url'] }}" aria-label="{{ $social['label'] }}" target="_blank" rel="noopener">
+                        <svg><use href="#i-{{ $social['key'] }}"/></svg>
+                    </a>
                 @endforeach
             </nav>
             <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch colour theme">

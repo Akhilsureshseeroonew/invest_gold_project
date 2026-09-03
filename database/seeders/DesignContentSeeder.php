@@ -73,9 +73,12 @@ class DesignContentSeeder extends Seeder
             ],
         ];
 
+        // firstOrCreate, not updateOrCreate: seed the default only when the key is
+        // missing, so re-running this seeder never wipes a value an admin has set
+        // in Site Settings (social links, address, phone, calculator rates, …).
         foreach ($flat as $group => $pairs) {
             foreach ($pairs as $key => $value) {
-                Setting::updateOrCreate(
+                Setting::firstOrCreate(
                     ['key' => $key],
                     ['group' => $group, 'value' => ['v' => $value]],
                 );

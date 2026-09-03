@@ -8,13 +8,10 @@
             </a>
             <p style="max-width:40ch">{{ config('site.footer_about') }}</p>
             <nav class="social" style="margin-top:1.3rem" aria-label="Social media">
-                @foreach (['facebook' => 'Facebook', 'instagram' => 'Instagram', 'youtube' => 'YouTube', 'linkedin' => 'LinkedIn'] as $key => $label)
-                    @if ($url = config("site.social.$key"))
-                        <a href="{{ $url }}" aria-label="{{ $label }}"
-                           @if ($url !== '#') target="_blank" rel="noopener" @endif>
-                            <svg><use href="#i-{{ $key }}"/></svg>
-                        </a>
-                    @endif
+                @foreach (\App\Support\Site::socialLinks() as $social)
+                    <a href="{{ $social['url'] }}" aria-label="{{ $social['label'] }}" target="_blank" rel="noopener">
+                        <svg><use href="#i-{{ $social['key'] }}"/></svg>
+                    </a>
                 @endforeach
             </nav>
         </div>
@@ -108,13 +105,13 @@
 
 {{-- ================= SIDE MASCOT — SOCIAL LINKS ================= --}}
 
+@php $socialLinks = \App\Support\Site::socialLinks(); @endphp
+@if (! empty($socialLinks))
 <div class="smascot" id="sideMascot">
     <div class="smascot__panel">
-        @foreach (['facebook' => 'Facebook', 'instagram' => 'Instagram', 'youtube' => 'YouTube', 'linkedin' => 'LinkedIn', 'x' => 'X'] as $key => $label)
-            @if ($url = config("site.social.$key"))
-                <a class="smascot__item" href="{{ $url }}" aria-label="{{ $label }}"
-                   @if ($url !== '#') target="_blank" rel="noopener" @endif><svg><use href="#i-{{ $key }}"/></svg></a>
-            @endif
+        @foreach ($socialLinks as $social)
+            <a class="smascot__item" href="{{ $social['url'] }}" aria-label="{{ $social['label'] }}"
+               target="_blank" rel="noopener"><svg><use href="#i-{{ $social['key'] }}"/></svg></a>
         @endforeach
     </div>
     <button class="smascot__btn" id="sideMascotBtn" type="button" aria-expanded="false"
@@ -122,6 +119,7 @@
         <img src="{{ asset('assets/img/mascot_.webp') }}" alt="" loading="lazy" decoding="async">
     </button>
 </div>
+@endif
 
 <button class="totop" id="toTop" type="button" aria-label="Back to top">
     <svg width="18" height="18"><use href="#i-arrow-up"/></svg>

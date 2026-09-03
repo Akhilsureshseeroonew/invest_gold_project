@@ -115,11 +115,13 @@ class ManageSiteSettings extends Page implements HasForms
                             ->helperText('Shown in the "Disclaimer" section at the foot of every product / loan page. Separate paragraphs with a blank line.'),
                     ]),
                     Tabs\Tab::make('Social')->schema([
-                        TextInput::make('social_facebook')->label('Facebook URL')->url(),
-                        TextInput::make('social_instagram')->label('Instagram URL')->url(),
-                        TextInput::make('social_youtube')->label('YouTube URL')->url(),
-                        TextInput::make('social_linkedin')->label('LinkedIn URL')->url(),
-                        TextInput::make('social_x')->label('X / Twitter URL')->url(),
+                        TextInput::make('social_facebook')->label('Facebook URL')
+                            ->placeholder('https://facebook.com/yourpage')
+                            ->helperText('Paste the full profile link for each network. Leave a field blank to hide that icon on the site — "https://" is added automatically if you omit it.'),
+                        TextInput::make('social_instagram')->label('Instagram URL')->placeholder('https://instagram.com/yourhandle'),
+                        TextInput::make('social_youtube')->label('YouTube URL')->placeholder('https://youtube.com/@yourchannel'),
+                        TextInput::make('social_linkedin')->label('LinkedIn URL')->placeholder('https://linkedin.com/company/…'),
+                        TextInput::make('social_x')->label('X / Twitter URL')->placeholder('https://x.com/yourhandle'),
                     ]),
                     Tabs\Tab::make('Calculator defaults')->schema([
                         Section::make('Gold Loan calculator')->columns(2)->schema([
@@ -146,10 +148,16 @@ class ManageSiteSettings extends Page implements HasForms
         $state = $this->form->getState();
 
         foreach (self::FIELDS as $key => $path) {
+            $isSocial = str_starts_with($path, 'site.social.');
             $group = str_starts_with($path, 'site.calculator.') ? 'calculator'
-                : (str_starts_with($path, 'site.social.') ? 'social' : 'site');
+                : ($isSocial ? 'social' : 'site');
 
-            Settings::put($group, $path, $state[$key] ?? null);
+            $value = $state[$key] ?? null;
+            if ($isSocial) {
+                $value = \App\Support\Site::normalizeUrl($value);
+            }
+
+            Settings::put($group, $path, $value);
         }
 
         Notification::make()->title('Settings saved')->success()->send();
