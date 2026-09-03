@@ -263,78 +263,69 @@
             </div>
           </div>
 
-          <div
-            class="grid grid--2"
-            style="align-items: center; gap: clamp(1.6rem, 3.5vw, 3rem)"
-          >
-            <div data-reveal="left">
-              <p style="font-size: 1.02rem; margin-bottom: 1.1rem">
-                Invest Gold &amp; General Finance Pvt. Ltd. began in 1996 in
-                Urakam, Thrissur, founded by a group of entrepreneurs with roots
-                in Kerala's lending and chit fund sectors. Originally
-                established as Invest Chit &amp; General Finance, the company
-                received its NBFC certification from the Reserve Bank of India
-                in 2001 — a turning point that shifted our focus entirely to
-                lending.
-              </p>
-              <p style="margin-bottom: 1.6rem">
-                What started as a single office serving the Thrissur community
-                has grown into a trusted financial partner for families across
-                Kerala — offering gold loans, personal loans, Mahila loans,
-                consumer loans, and fixed-return investment options like NCDs
-                and Subordinated Debts.
-              </p>
-              <a
-                class="btn btn--gold"
-                href="https://wa.me/919074523723"
-                target="_blank"
-                rel="noopener"
-              >
-                Talk to Our Team
-                <svg width="16" height="16"><use href="#i-whatsapp" /></svg>
-              </a>
-            </div>
+          <div class="about__intro" data-reveal>
+            <p>
+              Invest Gold &amp; General Finance Pvt. Ltd. began in 1996 in
+              Urakam, Thrissur, founded by a group of entrepreneurs with roots
+              in Kerala's lending and chit fund sectors. Originally established
+              as Invest Chit &amp; General Finance, the company received its
+              NBFC certification from the Reserve Bank of India in 2001 — a
+              turning point that shifted our focus entirely to lending.
+            </p>
+            <p>
+              What started as a single office serving the Thrissur community has
+              grown into a trusted financial partner for families across Kerala
+              — offering gold loans, personal loans, Mahila loans, consumer
+              loans, and fixed-return investment options like NCDs and
+              Subordinated Debts.
+            </p>
+            <a
+              class="btn btn--gold"
+              href="https://wa.me/{{ config('site.whatsapp') }}"
+              target="_blank"
+              rel="noopener"
+            >
+              Talk to Our Team
+            </a>
+          </div>
 
-            <div class="grid grid--2" data-reveal="right" style="gap: 1.1rem">
-              <div class="card" style="padding: 1.5rem 1.35rem">
-                <div class="card-icon">
-                  <svg><use href="#i-trend" /></svg>
-                </div>
-                <h3 style="font-size: 1.1rem">Our Vision</h3>
-                <p style="font-size: 0.88rem; margin: 0">
-                  A future where financial empowerment transforms lives and
-                  communities.
-                </p>
+          <div class="about__cards" data-reveal>
+            <div class="card">
+              <div class="card-icon">
+                <svg><use href="#i-trend" /></svg>
               </div>
-              <div class="card" style="padding: 1.5rem 1.35rem">
-                <div class="card-icon">
-                  <svg><use href="#i-female" /></svg>
-                </div>
-                <h3 style="font-size: 1.1rem">Our Mission</h3>
-                <p style="font-size: 0.88rem; margin: 0">
-                  To empower women and farmers with innovative financial
-                  solutions that promote independence and sustainable growth.
-                </p>
+              <h3>Our Vision</h3>
+              <p>
+                A future where financial empowerment transforms lives and
+                communities.
+              </p>
+            </div>
+            <div class="card">
+              <div class="card-icon">
+                <svg><use href="#i-female" /></svg>
               </div>
-              <div
-                class="card"
-                style="grid-column: 1/-1; padding: 1.5rem 1.35rem"
-              >
-                <div class="card-icon">
-                  <svg><use href="#i-award" /></svg>
-                </div>
-                <h3 style="font-size: 1.1rem">How We Work</h3>
-                <p style="font-size: 0.88rem; margin: 0">
-                  No one-size-fits-all products. We take time to understand what
-                  each customer actually needs before guiding them through a
-                  simple, transparent process — clear terms, no hidden charges,
-                  strict RBI compliance.
-                </p>
+              <h3>Our Mission</h3>
+              <p>
+                To empower women and farmers with innovative financial solutions
+                that promote independence and sustainable growth.
+              </p>
+            </div>
+            <div class="card">
+              <div class="card-icon">
+                <svg><use href="#i-award" /></svg>
               </div>
+              <h3>How We Work</h3>
+              <p>
+                No one-size-fits-all products. We take time to understand what
+                each customer actually needs before guiding them through a
+                simple, transparent process — clear terms, no hidden charges,
+                strict RBI compliance.
+              </p>
             </div>
           </div>
 
           <!-- Invest Gold by the numbers -->
+          <div class="stats-band" data-reveal>
           <div class="stats">
             <div class="stat" data-reveal="zoom">
               <b class="gold-text"><span data-count="10000">0</span>+</b
@@ -348,6 +339,7 @@
               <b class="gold-text"><span data-count="2001">0</span></b
               ><span>RBI Certified</span>
             </div>
+          </div>
           </div>
         </div>
       </section>
@@ -448,7 +440,7 @@
       </section>
 
       <!-- ================= 06. INVESTMENTS ================= -->
-      <section class="section" id="investment">
+      <section class="section section--gold" id="investment">
         <div class="container">
           <div class="section-head" data-reveal>
             <span class="eyebrow">Investments</span>
@@ -462,119 +454,97 @@
             </p>
           </div>
 
-          <div class="grid grid--3">
+          <div class="invtl" data-reveal>
+            <div class="invtl__rail" role="tablist" aria-label="Investment options">
+              <button class="invtl__step is-active" id="inv-tab-ncd" type="button"
+                      role="tab" aria-selected="true" aria-controls="inv-panel-ncd">
+                <span class="invtl__pill">Secured</span>
+                <span class="invtl__dot" aria-hidden="true"></span>
+              </button>
+              <button class="invtl__step" id="inv-tab-sub" type="button"
+                      role="tab" aria-selected="false" aria-controls="inv-panel-sub" tabindex="-1">
+                <span class="invtl__pill">5 Year Term</span>
+                <span class="invtl__dot" aria-hidden="true"></span>
+              </button>
+              <button class="invtl__step" id="inv-tab-dbl" type="button"
+                      role="tab" aria-selected="false" aria-controls="inv-panel-dbl" tabindex="-1">
+                <span class="invtl__pill">2x Target</span>
+                <span class="invtl__dot" aria-hidden="true"></span>
+              </button>
+            </div>
+
             <!-- NCD -->
-            <article class="card invest" data-reveal="zoom" data-tilt>
-              <div class="invest__top">
-                <div class="card-icon" style="margin: 0">
-                  <svg><use href="#i-lock" /></svg>
+            <article class="invtl__panel" id="inv-panel-ncd" role="tabpanel" aria-labelledby="inv-tab-ncd" tabindex="0">
+              <span class="invtl__tag">Secured</span>
+              <div class="invtl__cols">
+                <h3>Non-Convertible Debentures</h3>
+                <div class="invtl__body">
+                  <p>
+                    Fixed interest income with monthly or quarterly payouts, secured
+                    against company assets — a predictable way to grow savings
+                    without market risk.
+                  </p>
+                  <ul class="invest__list">
+                    <li><svg><use href="#i-check" /></svg> Secured against company assets</li>
+                    <li><svg><use href="#i-check" /></svg> Choose from defined tenure options</li>
+                    <li><svg><use href="#i-check" /></svg> Monthly / quarterly payout</li>
+                    <li><svg><use href="#i-check" /></svg> Transferable with company approval</li>
+                  </ul>
+                  <a class="link-arrow invtl__cta" href="/investment/ncd"
+                    >Explore NCD Options
+                    <svg width="15" height="15"><use href="#i-arrow-right" /></svg
+                  ></a>
                 </div>
-                <span class="invest__tag">Secured</span>
               </div>
-              <h3>Non-Convertible Debentures</h3>
-              <p>
-                Fixed interest income with monthly or quarterly payouts, secured
-                against company assets — a predictable way to grow savings
-                without market risk.
-              </p>
-              <ul class="invest__list">
-                <li>
-                  <svg><use href="#i-check" /></svg> Secured against company
-                  assets
-                </li>
-                <li>
-                  <svg><use href="#i-check" /></svg> Choose from defined tenure
-                  options
-                </li>
-                <li>
-                  <svg><use href="#i-check" /></svg> Monthly / quarterly payout
-                </li>
-                <li>
-                  <svg><use href="#i-check" /></svg> Transferable with company
-                  approval
-                </li>
-              </ul>
-              <a class="link-arrow" href="/investment/ncd"
-                >Explore NCD Options
-                <svg width="15" height="15"><use href="#i-arrow-right" /></svg
-              ></a>
             </article>
 
             <!-- Subordinated Debt -->
-            <article class="card invest" data-reveal="zoom" data-tilt>
-              <div class="invest__top">
-                <div class="card-icon" style="margin: 0">
-                  <svg><use href="#i-calendar" /></svg>
+            <article class="invtl__panel" id="inv-panel-sub" role="tabpanel" aria-labelledby="inv-tab-sub" tabindex="0" hidden>
+              <span class="invtl__tag">5-Year Term</span>
+              <div class="invtl__cols">
+                <h3>Subordinated Debt</h3>
+                <div class="invtl__body">
+                  <p>
+                    Fixed monthly interest payout over a 5-year term — built for
+                    long-term investors seeking reliable, predictable income from a
+                    proven lender.
+                  </p>
+                  <ul class="invest__list">
+                    <li><svg><use href="#i-check" /></svg> Fixed tenure — 60 or 72 months</li>
+                    <li><svg><use href="#i-check" /></svg> Monthly, quarterly, yearly or on maturity</li>
+                    <li><svg><use href="#i-check" /></svg> Non-marketable certificate</li>
+                    <li><svg><use href="#i-check" /></svg> Cheque / account transfer only</li>
+                  </ul>
+                  <a class="link-arrow invtl__cta" href="/investment/subordinated-debt"
+                    >Explore Subordinated Debt
+                    <svg width="15" height="15"><use href="#i-arrow-right" /></svg
+                  ></a>
                 </div>
-                <span class="invest__tag">5-Year Term</span>
               </div>
-              <h3>Subordinated Debt</h3>
-              <p>
-                Fixed monthly interest payout over a 5-year term — built for
-                long-term investors seeking reliable, predictable income from a
-                proven lender.
-              </p>
-              <ul class="invest__list">
-                <li>
-                  <svg><use href="#i-check" /></svg> Fixed tenure — 60 or 72
-                  months
-                </li>
-                <li>
-                  <svg><use href="#i-check" /></svg> Monthly, quarterly, yearly
-                  or on maturity
-                </li>
-                <li>
-                  <svg><use href="#i-check" /></svg> Non-marketable certificate
-                </li>
-                <li>
-                  <svg><use href="#i-check" /></svg> Cheque / account transfer
-                  only
-                </li>
-              </ul>
-              <a class="link-arrow" href="/investment/subordinated-debt"
-                >Explore Subordinated Debt
-                <svg width="15" height="15"><use href="#i-arrow-right" /></svg
-              ></a>
             </article>
 
             <!-- Doubling -->
-            <article
-              class="card invest invest--feature"
-              data-reveal="zoom"
-              data-tilt
-            >
-              <div class="invest__top">
-                <div class="card-icon" style="margin: 0">
-                  <svg><use href="#i-trend" /></svg>
+            <article class="invtl__panel" id="inv-panel-dbl" role="tabpanel" aria-labelledby="inv-tab-dbl" tabindex="0" hidden>
+              <span class="invtl__tag">2x Target</span>
+              <div class="invtl__cols">
+                <h3>Doubling Sub-Debt Scheme</h3>
+                <div class="invtl__body">
+                  <p>
+                    A 72-month plan that states your target maturity benefit — 2x
+                    your investment — right on your certificate from day one.
+                  </p>
+                  <ul class="invest__list">
+                    <li><svg><use href="#i-check" /></svg> 72-month tenure, 60-month lock-in</li>
+                    <li><svg><use href="#i-check" /></svg> Invest ₹10,000 – ₹1 Crore</li>
+                    <li><svg><use href="#i-check" /></svg> Target benefit stated in writing</li>
+                    <li><svg><use href="#i-check" /></svg> TDS as per applicable IT rules</li>
+                  </ul>
+                  <a class="link-arrow invtl__cta" href="/investment/doubling-scheme"
+                    >Explore the Doubling Scheme
+                    <svg width="15" height="15"><use href="#i-arrow-right" /></svg
+                  ></a>
                 </div>
-                <span class="invest__tag">2x Target</span>
               </div>
-              <h3>Doubling Sub-Debt Scheme</h3>
-              <p>
-                A 72-month plan that states your target maturity benefit — 2x
-                your investment — right on your certificate from day one.
-              </p>
-              <ul class="invest__list">
-                <li>
-                  <svg><use href="#i-check" /></svg> 72-month tenure, 60-month
-                  lock-in
-                </li>
-                <li>
-                  <svg><use href="#i-check" /></svg> Invest ₹10,000 – ₹1 Crore
-                </li>
-                <li>
-                  <svg><use href="#i-check" /></svg> Target benefit stated in
-                  writing
-                </li>
-                <li>
-                  <svg><use href="#i-check" /></svg> TDS as per applicable IT
-                  rules
-                </li>
-              </ul>
-              <a class="link-arrow" href="/investment/doubling-scheme"
-                >Explore the Doubling Scheme
-                <svg width="15" height="15"><use href="#i-arrow-right" /></svg
-              ></a>
             </article>
           </div>
         </div>

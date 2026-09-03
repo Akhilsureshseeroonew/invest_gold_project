@@ -822,6 +822,84 @@
     onScroll();
   })();
 
+  /* ---------- 12b. SIDE MASCOT — SOCIAL LINKS ---------- */
+  (function sideMascot() {
+    var root = $("#sideMascot"),
+      btn = $("#sideMascotBtn");
+    if (!root || !btn) return;
+    var hoverable = window.matchMedia("(hover: hover)").matches;
+    var timer = null;
+
+    var open = function (state) {
+      clearTimeout(timer);
+      root.classList.toggle("is-open", state);
+      btn.setAttribute("aria-expanded", String(state));
+    };
+    /* grace period so the pointer can cross the gap to the icons */
+    var closeSoon = function () {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        open(false);
+      }, 240);
+    };
+
+    if (hoverable) {
+      root.addEventListener("mouseenter", function () {
+        open(true);
+      });
+      root.addEventListener("mouseleave", closeSoon);
+    }
+    btn.addEventListener("click", function () {
+      open(!root.classList.contains("is-open"));
+    });
+    root.addEventListener("focusin", function () {
+      open(true);
+    });
+    document.addEventListener("click", function (e) {
+      if (!root.contains(e.target)) open(false);
+    });
+    $$(".smascot__item", root).forEach(function (a) {
+      a.addEventListener("click", function () {
+        open(false);
+      });
+    });
+  })();
+
+  /* ---------- 12c. INVESTMENT TIMELINE (tabs) ---------- */
+  (function investTimeline() {
+    var root = $(".invtl");
+    if (!root) return;
+    var tabs = $$(".invtl__step", root),
+      panels = $$(".invtl__panel", root);
+    if (tabs.length !== panels.length || !tabs.length) return;
+
+    function select(i) {
+      tabs.forEach(function (t, n) {
+        t.classList.toggle("is-active", n === i);
+        t.setAttribute("aria-selected", String(n === i));
+        t.tabIndex = n === i ? 0 : -1;
+      });
+      panels.forEach(function (p, n) {
+        p.hidden = n !== i;
+      });
+    }
+
+    tabs.forEach(function (t, i) {
+      t.addEventListener("click", function () {
+        select(i);
+      });
+      t.addEventListener("keydown", function (e) {
+        var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        var n = (i + d + tabs.length) % tabs.length;
+        select(n);
+        tabs[n].focus();
+      });
+    });
+    select(0);
+  })();
+
   /* ---------- 13. BRANCH SEARCH ---------- */
   (function branches() {
     var input = $("#branchSearch"),

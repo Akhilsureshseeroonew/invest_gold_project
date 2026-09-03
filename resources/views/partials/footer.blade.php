@@ -106,6 +106,23 @@
     </button>
 </div>
 
+{{-- ================= SIDE MASCOT — SOCIAL LINKS ================= --}}
+
+<div class="smascot" id="sideMascot">
+    <div class="smascot__panel">
+        @foreach (['facebook' => 'Facebook', 'instagram' => 'Instagram', 'youtube' => 'YouTube', 'linkedin' => 'LinkedIn', 'x' => 'X'] as $key => $label)
+            @if ($url = config("site.social.$key"))
+                <a class="smascot__item" href="{{ $url }}" aria-label="{{ $label }}"
+                   @if ($url !== '#') target="_blank" rel="noopener" @endif><svg><use href="#i-{{ $key }}"/></svg></a>
+            @endif
+        @endforeach
+    </div>
+    <button class="smascot__btn" id="sideMascotBtn" type="button" aria-expanded="false"
+            aria-label="Show social links">
+        <img src="{{ asset('assets/img/mascot_.webp') }}" alt="" loading="lazy" decoding="async">
+    </button>
+</div>
+
 <button class="totop" id="toTop" type="button" aria-label="Back to top">
     <svg width="18" height="18"><use href="#i-arrow-up"/></svg>
 </button>

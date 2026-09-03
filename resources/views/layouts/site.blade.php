@@ -18,8 +18,9 @@
     <meta property="og:description" content="@yield('meta_description', 'Instant gold, personal & consumer loans with a trusted NBFC in Kerala. RBI-registered since 1996.')">
     <meta property="og:image" content="{{ asset('assets/img/mascot.png') }}">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" href="{{ asset('assets/img/logo.png') }}" sizes="any">
-    <link rel="apple-touch-icon" href="{{ asset('assets/img/logo.png') }}">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="32x32">
+    <link rel="icon" href="{{ asset('assets/img/favicon-512.png') }}" type="image/png" sizes="512x512">
+    <link rel="apple-touch-icon" href="{{ asset('assets/img/apple-touch-icon.png') }}">
 
     {{-- ===== Fonts ===== --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">

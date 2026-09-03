@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Invest Gold Finance')
             ->brandLogo(fn () => asset('assets/img/logo.png'))
             ->brandLogoHeight('1.9rem')
-            ->favicon(fn () => asset('assets/img/logo.png'))
+            ->favicon(fn () => asset('assets/img/favicon-512.png'))
             ->font('Plus Jakarta Sans')
             ->darkMode(true, isForced: true)
             ->colors([
