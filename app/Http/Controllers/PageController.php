@@ -18,7 +18,10 @@ class PageController extends Controller
         $page = Page::where('slug', 'home')->published()->first()
             ?? new Page(['slug' => 'home', 'template' => 'home', 'title' => config('site.short_name')]);
 
-        return view('pages.home', ['page' => $page]);
+        return view('pages.home', [
+            'page' => $page,
+            'news' => NewsItem::published()->orderByDesc('published_at')->take(3)->get(),
+        ]);
     }
 
     public function show(string $slug)

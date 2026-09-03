@@ -186,6 +186,48 @@ class PublicSiteTest extends TestCase
         $this->assertSame('/contact', $n('/contact'));
     }
 
+    public function test_homepage_get_in_touch_section_uses_the_contact_site_settings(): void
+    {
+        \App\Support\Settings::put('site', 'site.phone_primary', '+91 99999 00000');
+        \App\Support\Settings::put('site', 'site.phone_primary_tel', '919999900000');
+        \App\Support\Settings::put('site', 'site.email', 'reception@example.test');
+        \App\Support\Settings::put('site', 'site.hours', 'Weekdays 10 to 4');
+        (new \App\Providers\AppServiceProvider($this->app))->boot();   // replay settings into config
+
+        $home = $this->get('/')->assertOk();
+        $home->assertSee('+91 99999 00000');
+        $home->assertSee('tel:919999900000', false);
+        $home->assertSee('reception@example.test');
+        $home->assertSee('Weekdays 10 to 4');
+        $home->assertSee('action="'.route('enquiry.store').'"', false);   // real, wired-up form
+
+        // same values on the dedicated Contact page — one source of truth
+        $this->get('/contact')->assertOk()->assertSee('reception@example.test');
+    }
+
+    public function test_homepage_news_section_is_driven_by_news_items(): void
+    {
+        $latest = NewsItem::published()->orderByDesc('published_at')->take(3)->get();
+        $this->assertGreaterThan(0, $latest->count());
+
+        $html = $this->get('/')->assertOk()->getContent();
+
+        // the homepage #news section shows the 3 most-recent news items, linked to their article
+        foreach ($latest as $item) {
+            $this->assertStringContainsString(e($item->title), $html);
+            $this->assertStringContainsString(route('news.show', $item), $html);
+        }
+
+        // editing a news item flows straight through to the homepage
+        $first = $latest->first();
+        $first->update(['title' => 'Homepage Sync Check News']);
+        $this->get('/')->assertOk()->assertSee('Homepage Sync Check News');
+
+        // unpublishing removes it from the homepage
+        $first->update(['is_published' => false]);
+        $this->get('/')->assertOk()->assertDontSee('Homepage Sync Check News');
+    }
+
     public function test_unpublished_post_is_404(): void
     {
         $post = Post::first();
