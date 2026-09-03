@@ -25,7 +25,7 @@
                     ['label' => 'Personal Loan',  'url' => '/products/personal-loan'],
                     ['label' => 'Mahila Loan',    'url' => '/products/mahila-loan'],
                     ['label' => 'Consumer Loan',  'url' => '/products/consumer-loan'],
-                    ['label' => 'Gold Calculator', 'url' => '/calculator'],
+                    ['label' => 'Loan Calculator', 'url' => '/#calculator'],
                 ]],
                 ['label' => 'Company', 'children' => [
                     ['label' => 'About Us',       'url' => '/about'],

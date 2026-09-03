@@ -46,33 +46,6 @@
         </section>
     @endif
 
-    @php
-        $isGoldLoan = str_contains($page->slug, 'gold-loan');
-        $loanRate = match (true) {
-            str_contains($page->slug, 'mahila')   => config('site.calculator.mahila_loan_rate', 14),
-            str_contains($page->slug, 'consumer') => config('site.calculator.consumer_loan_rate', 18),
-            default                               => config('site.calculator.personal_loan_rate', 16),
-        };
-    @endphp
-
-    <section class="section section--alt" id="calculator">
-        <div class="container">
-            @if ($isGoldLoan)
-                <x-site.section-head
-                    eyebrow="Gold Loan Calculator"
-                    :title="'How Much Can Your Gold <span class=\'gold-text\'>Unlock?</span>'"
-                    sub="Estimate your eligible gold loan — calculate by the gold you hold, or by the cash you need." />
-                <x-site.calculator-panel />
-            @else
-                <x-site.section-head
-                    eyebrow="{{ $page->title }} EMI Calculator"
-                    :title="'Your <span class=\'gold-text\'>'.e($page->title).'</span> EMI'"
-                    sub="Enter the loan amount, interest rate and tenure to see your monthly EMI, total interest and total amount payable (reducing-balance method)." />
-                <x-site.loan-calculator :title="$page->title" :rate="$loanRate" />
-            @endif
-        </div>
-    </section>
-
     <x-site.cta-band
         :title="$page->cta_heading ?: 'Ready to get started?'"
         :text="$page->cta_text ?: 'Visit your nearest branch or send an enquiry — our team will walk you through eligibility and documentation.'"

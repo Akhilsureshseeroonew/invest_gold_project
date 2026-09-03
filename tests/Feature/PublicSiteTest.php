@@ -30,7 +30,7 @@ class PublicSiteTest extends TestCase
             '/products/mahila-loan', '/products/consumer-loan',
             '/investment', '/investment/ncd', '/investment/subordinated-debt',
             '/investment/doubling-scheme', '/investment/interest-rates',
-            '/calculator', '/blog', '/news', '/careers', '/branches', '/policies', '/contact',
+            '/blog', '/news', '/careers', '/branches', '/policies', '/contact',
         ]);
     }
 
@@ -38,6 +38,11 @@ class PublicSiteTest extends TestCase
     public function test_page_renders(string $path): void
     {
         $this->get($path)->assertOk();
+    }
+
+    public function test_calculator_url_redirects_to_the_homepage_section(): void
+    {
+        $this->get('/calculator')->assertRedirect('/#calculator');
     }
 
     public function test_unknown_page_is_404(): void

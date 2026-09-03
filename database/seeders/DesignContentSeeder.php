@@ -90,7 +90,13 @@ class DesignContentSeeder extends Seeder
 
     protected function seedPages(): void
     {
-        foreach ($this->pageDefinitions() as $def) {
+        $defs = $this->pageDefinitions();
+
+        // Drop pages that were seeded by an earlier version and are no longer
+        // defined here (e.g. the old standalone /calculator page).
+        Page::whereIn('slug', ['calculator'])->delete();
+
+        foreach ($defs as $def) {
             Page::updateOrCreate(['slug' => $def['slug']], $def);
         }
     }
@@ -112,8 +118,8 @@ class DesignContentSeeder extends Seeder
             'hero_lead'     => $o['lead'],
             'hero_ctas'     => [
                 ['label' => 'Enquire Now', 'url' => '/contact?service='.rawurlencode($o['h1']), 'style' => 'btn--gold', 'icon' => 'arrow-right'],
-                // scroll to THIS page's own calculator section, not the gold-only /calculator page
-                ['label' => 'EMI Calculator', 'url' => '#calculator', 'style' => 'btn--ghost', 'icon' => 'calc'],
+                // the calculator lives only on the homepage now
+                ['label' => 'Loan Calculator', 'url' => '/#calculator', 'style' => 'btn--ghost', 'icon' => 'calc'],
             ],
             'features'   => $o['why'],
             'steps'      => $o['steps'],
@@ -372,7 +378,7 @@ class DesignContentSeeder extends Seeder
                 'hero_heading' => 'Interest Rates for <span class="gold-text">Every Scheme</span>',
                 'hero_lead' => 'Select a scheme to see its detailed rate structure. Rates are reviewed periodically — the figures published at your branch on the day of transaction are final.',
                 'hero_ctas' => [
-                    ['label' => 'Open the Calculator', 'url' => '/calculator', 'style' => 'btn--gold', 'icon' => 'calc'],
+                    ['label' => 'Open the Calculator', 'url' => '/#calculator', 'style' => 'btn--gold', 'icon' => 'calc'],
                     ['label' => 'Confirm at a Branch', 'url' => '/branches', 'style' => 'btn--ghost'],
                 ],
                 'body' => 'Rates shown are indicative and subject to periodic revision. Interest rate slabs may be applied '
@@ -381,22 +387,6 @@ class DesignContentSeeder extends Seeder
                 'cta_heading' => 'Want an exact figure?',
                 'cta_text' => 'Our branch team will confirm today\'s applicable rate for your scheme, tenure and amount.',
                 'sort_order' => 11,
-            ],
-            [
-                'slug' => 'calculator', 'template' => 'calculator', 'icon' => 'calc', 'title' => 'Gold Loan Calculator', 'menu_label' => 'Calculator',
-                'seo_title' => 'Gold Loan Calculator | Invest Gold & General Finance',
-                'seo_description' => 'Estimate your eligible gold loan amount and EMI. Switch between calculating by gold weight or by the cash you need.',
-                'hero_eyebrow' => 'Instant Estimate',
-                'hero_heading' => 'Gold Loan <span class="gold-text">Calculator</span>',
-                'hero_lead' => 'Switch between calculating by the gold you hold, or the cash you need. Adjust purity, rate, tenure and interest to see your eligible amount and approximate EMI.',
-                'highlights' => [
-                    ['icon' => 'trend',    'title' => 'Weight & Purity',     'text' => 'Your jewellery is appraised for net gold weight after deducting stones and non-gold parts, then valued at its purity — 22K, 21K, 18K or 24K equivalent.'],
-                    ['icon' => 'coin',     'title' => 'Prevailing Gold Rate', 'text' => 'Valuation uses the applicable rate per gram on the day of pledge, so the same ornament can support a different amount on a different day.'],
-                    ['icon' => 'shield',   'title' => 'Loan-to-Value Cap',    'text' => 'The eligible amount is a percentage of the appraised value, capped in line with RBI norms — the calculator applies 75%.'],
-                ],
-                'cta_heading' => 'Happy with the estimate?',
-                'cta_text' => 'Bring your ornaments to a branch for a free appraisal — most gold loans are disbursed the same day.',
-                'sort_order' => 12,
             ],
             [
                 'slug' => 'news', 'template' => 'news-index', 'icon' => 'building', 'title' => 'News & Media', 'menu_label' => 'News & Media',
@@ -540,7 +530,7 @@ class DesignContentSeeder extends Seeder
                 ['label' => 'Personal Loan', 'slug' => 'products/personal-loan'],
                 ['label' => 'Mahila Loan', 'slug' => 'products/mahila-loan'],
                 ['label' => 'Consumer Loan', 'slug' => 'products/consumer-loan'],
-                ['label' => 'Gold Calculator', 'slug' => 'calculator'],
+                ['label' => 'Loan Calculator', 'url' => '/#calculator'],
             ]],
             ['label' => 'Company', 'children' => [
                 ['label' => 'About Us', 'slug' => 'about'],
@@ -560,6 +550,7 @@ class DesignContentSeeder extends Seeder
                     ['menu' => $menu, 'label' => $node['label'], 'parent_id' => null],
                     [
                         'page_id'    => isset($node['slug']) ? Page::where('slug', $node['slug'])->value('id') : null,
+                        'url'        => $node['url'] ?? null,
                         'sort_order' => $order++,
                         'is_active'  => true,
                     ],
@@ -570,7 +561,8 @@ class DesignContentSeeder extends Seeder
                     MenuItem::updateOrCreate(
                         ['menu' => $menu, 'label' => $child['label'], 'parent_id' => $parent->id],
                         [
-                            'page_id'    => Page::where('slug', $child['slug'])->value('id'),
+                            'page_id'    => isset($child['slug']) ? Page::where('slug', $child['slug'])->value('id') : null,
+                            'url'        => $child['url'] ?? null,
                             'sort_order' => $childOrder++,
                             'is_active'  => true,
                         ],

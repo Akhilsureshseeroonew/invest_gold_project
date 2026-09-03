@@ -11,6 +11,9 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 
 Route::post('/enquiry', [EnquiryController::class, 'store'])->name('enquiry.store');
 
+// The calculator now lives only in the homepage "#calculator" section.
+Route::redirect('/calculator', '/#calculator');
+
 // Collection detail pages — declared before the page catch-all.
 Route::get('/blog/{post:slug}', [PostController::class, 'show'])->name('blog.show');
 Route::get('/news/{news:slug}', [NewsController::class, 'show'])->name('news.show');
