@@ -807,14 +807,17 @@ p {
     }
 }
 
-/* Hide the mascot medallion + orbiting product links; the video is the visual now */
+/* Hide the homepage hero mascot medallion + orbiting product links; the
+   background video is the visual now. !important + late position so it beats
+   the design's own `.hero__visual { display:grid }` block further down and the
+   responsive `@media` rules. */
 .hero__visual {
-    display: none;
+    display: none !important;
 }
-.hero__inner {
+.hero .hero__inner {
     grid-template-columns: 1fr;
 }
-.hero__copy {
+.hero .hero__copy {
     max-width: 46rem;
 }
 .hero__inner {
