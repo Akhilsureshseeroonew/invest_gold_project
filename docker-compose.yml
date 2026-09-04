@@ -1,0 +1,55 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: investgold-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - investgold
+      - flatlive_default
+    expose:
+      - "80"
+
+  db:
+    image: mysql:8.0
+    container_name: investgold-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: investgold
+      MYSQL_USER: investgold
+      MYSQL_PASSWORD: investgold_db_password
+      MYSQL_ROOT_PASSWORD: investgold_root_password
+    volumes:
+      - investgold_mysql:/var/lib/mysql
+    networks:
+      - investgold
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-uinvestgold",
+          "-pinvestgold_db_password"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  investgold:
+    external: true
+
+  flatlive_default:
+    external: true
+
+volumes:
+  investgold_mysql:
