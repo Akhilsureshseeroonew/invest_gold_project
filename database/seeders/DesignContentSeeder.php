@@ -62,6 +62,10 @@ class DesignContentSeeder extends Seeder
                 'site.social.linkedin'  => config('site.social.linkedin'),
                 'site.social.x'         => config('site.social.x'),
             ],
+            'app' => [
+                'site.app.play_store'  => config('site.app.play_store'),
+                'site.app.apple_store' => config('site.app.apple_store'),
+            ],
             'calculator' => [
                 'site.calculator.gold_rate_per_gram'    => config('site.calculator.gold_rate_per_gram'),
                 'site.calculator.max_ltv_percent'       => config('site.calculator.max_ltv_percent'),

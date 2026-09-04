@@ -769,19 +769,29 @@
                 calculator and instant support
               </li>
             </ul>
-            <h3 style="font-size: 1.05rem; margin-bottom: 0.9rem">
-              Download Now
-            </h3>
-            <div class="store">
-              <a href="#" aria-label="Get it on Google Play">
-                <svg><use href="#i-play" /></svg>
-                <span><small>Get it on</small><b>Google Play</b></span>
-              </a>
-              <a href="#" aria-label="Download on the App Store">
-                <svg><use href="#i-apple" /></svg>
-                <span><small>Download on the</small><b>App Store</b></span>
-              </a>
-            </div>
+            @php
+              $playUrl  = \App\Support\Site::normalizeUrl(config('site.app.play_store'));
+              $appleUrl = \App\Support\Site::normalizeUrl(config('site.app.apple_store'));
+            @endphp
+            @if ($playUrl || $appleUrl)
+              <h3 style="font-size: 1.05rem; margin-bottom: 0.9rem">
+                Download Now
+              </h3>
+              <div class="store">
+                @if ($playUrl)
+                  <a href="{{ $playUrl }}" target="_blank" rel="noopener" aria-label="Get it on Google Play">
+                    <svg><use href="#i-play" /></svg>
+                    <span><small>Get it on</small><b>Google Play</b></span>
+                  </a>
+                @endif
+                @if ($appleUrl)
+                  <a href="{{ $appleUrl }}" target="_blank" rel="noopener" aria-label="Download on the App Store">
+                    <svg><use href="#i-apple" /></svg>
+                    <span><small>Download on the</small><b>App Store</b></span>
+                  </a>
+                @endif
+              </div>
+            @endif
           </div>
 
           <!-- App screen carousel (pure CSS/SVG mock screens) -->

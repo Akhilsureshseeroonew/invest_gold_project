@@ -45,6 +45,12 @@ return [
         'x'         => null,
     ],
 
+    // Mobile app store listings, set in admin (Site Settings → Mobile App).
+    'app' => [
+        'play_store'  => null,
+        'apple_store' => null,
+    ],
+
     'footer_about' => 'An RBI-registered NBFC serving Kerala since 1996 — gold loans, '
         .'personal loans, Mahila loans, consumer loans and fixed-return investments.',
 

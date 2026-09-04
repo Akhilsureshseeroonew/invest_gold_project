@@ -191,6 +191,22 @@ class PublicSiteTest extends TestCase
         $this->assertSame('/contact', $n('/contact'));
     }
 
+    public function test_homepage_app_store_links_come_from_site_settings(): void
+    {
+        // nothing set -> no store buttons, no dead "#" links
+        $this->get('/')->assertOk()
+            ->assertDontSee('aria-label="Get it on Google Play"', false);
+
+        // scheme-less URL entered in admin -> real link, https:// prepended, opens in new tab
+        config(['site.app.play_store' => 'play.google.com/store/apps/details?id=com.investgold']);
+        config(['site.app.apple_store' => 'https://apps.apple.com/app/id123']);
+
+        $html = $this->get('/')->assertOk()->getContent();
+        $this->assertStringContainsString('href="https://play.google.com/store/apps/details?id=com.investgold" target="_blank"', $html);
+        $this->assertStringContainsString('href="https://apps.apple.com/app/id123" target="_blank"', $html);
+        $this->assertStringContainsString('Download Now', $html);
+    }
+
     public function test_homepage_get_in_touch_section_uses_the_contact_site_settings(): void
     {
         \App\Support\Settings::put('site', 'site.phone_primary', '+91 99999 00000');

@@ -56,6 +56,8 @@ class ManageSiteSettings extends Page implements HasForms
         'social_youtube'      => 'site.social.youtube',
         'social_linkedin'     => 'site.social.linkedin',
         'social_x'            => 'site.social.x',
+        'app_play_store'      => 'site.app.play_store',
+        'app_apple_store'     => 'site.app.apple_store',
         'calc_gold_rate'      => 'site.calculator.gold_rate_per_gram',
         'calc_max_ltv'        => 'site.calculator.max_ltv_percent',
         'calc_interest'       => 'site.calculator.default_interest_pa',
@@ -123,6 +125,13 @@ class ManageSiteSettings extends Page implements HasForms
                         TextInput::make('social_linkedin')->label('LinkedIn URL')->placeholder('https://linkedin.com/company/…'),
                         TextInput::make('social_x')->label('X / Twitter URL')->placeholder('https://x.com/yourhandle'),
                     ]),
+                    Tabs\Tab::make('Mobile App')->schema([
+                        TextInput::make('app_play_store')->label('Google Play URL')
+                            ->placeholder('https://play.google.com/store/apps/details?id=…')
+                            ->helperText('Store listing links for the "Invest Gold Mobile App" section on the home page. Leave blank to hide that store button. "https://" is added automatically if you omit it.'),
+                        TextInput::make('app_apple_store')->label('App Store URL')
+                            ->placeholder('https://apps.apple.com/app/id…'),
+                    ]),
                     Tabs\Tab::make('Calculator defaults')->schema([
                         Section::make('Gold Loan calculator')->columns(2)->schema([
                             TextInput::make('calc_gold_rate')->label('Gold rate per gram (22K, ₹)')->numeric(),
@@ -148,12 +157,13 @@ class ManageSiteSettings extends Page implements HasForms
         $state = $this->form->getState();
 
         foreach (self::FIELDS as $key => $path) {
-            $isSocial = str_starts_with($path, 'site.social.');
+            $isUrl = str_starts_with($path, 'site.social.') || str_starts_with($path, 'site.app.');
             $group = str_starts_with($path, 'site.calculator.') ? 'calculator'
-                : ($isSocial ? 'social' : 'site');
+                : (str_starts_with($path, 'site.social.') ? 'social'
+                : (str_starts_with($path, 'site.app.') ? 'app' : 'site'));
 
             $value = $state[$key] ?? null;
-            if ($isSocial) {
+            if ($isUrl) {
                 $value = \App\Support\Site::normalizeUrl($value);
             }
 
