@@ -94,32 +94,26 @@
     </div>
 </footer>
 
-{{-- ================= FLOATING MASCOT ASSISTANT ================= --}}
+{{-- ================= FLOATING MASCOT — SOCIAL LINKS ================= --}}
+@php $socialLinks = \App\Support\Site::socialLinks(); @endphp
 <div class="fab" id="fab">
-    <button class="fab__btn" id="fabBtn" type="button" aria-expanded="false" aria-label="Open quick assistant">
+    @if (! empty($socialLinks))
+        <div class="fab__panel">
+            @foreach ($socialLinks as $social)
+                <a class="fab__item" href="{{ $social['url'] }}" target="_blank" rel="noopener"
+                   data-label="{{ $social['label'] }}" aria-label="{{ $social['label'] }}">
+                    <svg><use href="#i-{{ $social['key'] }}"/></svg>
+                </a>
+            @endforeach
+        </div>
+    @endif
+    <button class="fab__btn" id="fabBtn" type="button" aria-expanded="false"
+            aria-label="{{ ! empty($socialLinks) ? 'Show social links' : 'Invest Gold mascot' }}">
         <span class="fab__pulse" aria-hidden="true"></span>
         <canvas id="scrollAnimCanvas" class="fab__canvas" width="120" height="250"></canvas>
         <img class="fab__fallback" src="{{ asset('assets/img/mascot.png') }}" alt="" loading="lazy" decoding="async">
     </button>
 </div>
-
-{{-- ================= SIDE MASCOT — SOCIAL LINKS ================= --}}
-
-@php $socialLinks = \App\Support\Site::socialLinks(); @endphp
-@if (! empty($socialLinks))
-<div class="smascot" id="sideMascot">
-    <div class="smascot__panel">
-        @foreach ($socialLinks as $social)
-            <a class="smascot__item" href="{{ $social['url'] }}" aria-label="{{ $social['label'] }}"
-               target="_blank" rel="noopener"><svg><use href="#i-{{ $social['key'] }}"/></svg></a>
-        @endforeach
-    </div>
-    <button class="smascot__btn" id="sideMascotBtn" type="button" aria-expanded="false"
-            aria-label="Show social links">
-        <img src="{{ asset('assets/img/mascot_.webp') }}" alt="" loading="lazy" decoding="async">
-    </button>
-</div>
-@endif
 
 <button class="totop" id="toTop" type="button" aria-label="Back to top">
     <svg width="18" height="18"><use href="#i-arrow-up"/></svg>

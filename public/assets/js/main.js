@@ -644,19 +644,26 @@
       btn = $("#fabBtn");
     if (!fab || !btn) return;
     var hoverable = window.matchMedia("(hover: hover)").matches;
+    var timer = null;
 
     var open = function (state) {
+      clearTimeout(timer);
       fab.classList.toggle("is-open", state);
       btn.setAttribute("aria-expanded", String(state));
+    };
+    /* grace period so the pointer can cross the gap to the fanned-out icons */
+    var closeSoon = function () {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        open(false);
+      }, 260);
     };
 
     if (hoverable) {
       fab.addEventListener("mouseenter", function () {
         open(true);
       });
-      fab.addEventListener("mouseleave", function () {
-        open(false);
-      });
+      fab.addEventListener("mouseleave", closeSoon);
     }
     btn.addEventListener("click", function () {
       open(!fab.classList.contains("is-open"));

@@ -186,6 +186,14 @@
         return money(n);
     }
 
+    // fill the "played" portion of a range track (same visual as the gold calc)
+    function paintRange(input) {
+        if (!input) return;
+        var min = parseFloat(input.min), max = parseFloat(input.max);
+        var pct = max > min ? ((parseFloat(input.value) - min) / (max - min)) * 100 : 0;
+        input.style.setProperty('--fill', Math.max(0, Math.min(100, pct)) + '%');
+    }
+
     document.querySelectorAll('[data-loan-calc]').forEach(function (root) {
         var q = function (id) { return root.querySelector('#' + id); };
         var amount = q('lcAmount'), amountNum = q('lcAmountNum'),
@@ -208,6 +216,8 @@
             var perInstalment = emiMonthly, label = 'Monthly EMI';
             if (freq && freq.value === 'weekly') { perInstalment = emiMonthly * 12 / 52; label = 'Weekly instalment'; }
             else if (freq && freq.value === 'daily') { perInstalment = emiMonthly * 12 / 365; label = 'Daily instalment'; }
+
+            [amount, rate, tenure].forEach(paintRange);
 
             out.amount.textContent = money(P);
             out.amountWords.textContent = inWords(P);

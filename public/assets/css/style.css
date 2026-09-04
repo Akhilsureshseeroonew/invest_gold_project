@@ -2446,7 +2446,7 @@ input[type="range"]::-moz-range-thumb {
 /* floating mascot assistant — fixed in right bottom corner with full scroll animation */
 .fab {
     position: fixed;
-    right: 18px;
+    right: -8px;
     bottom: 18px;
     z-index: 85;
     pointer-events: none;
@@ -2503,6 +2503,17 @@ input[type="range"]::-moz-range-thumb {
     width: 50px;
     height: 50px;
     pointer-events: none;
+    z-index: 2; /* sit above the mascot button/canvas, not behind it */
+}
+.fab__btn {
+    z-index: 1;
+}
+/* when open, grow the hover region so the pointer can travel from the mascot
+   to any fanned-out icon without crossing "dead" space */
+.fab.is-open .fab__panel {
+    width: 210px;
+    height: 215px;
+    pointer-events: auto;
 }
 
 .fab__item {
@@ -2557,24 +2568,31 @@ input[type="range"]::-moz-range-thumb {
     pointer-events: auto;
 }
 
+/* icons fan out in an arc that wraps the mascot — from straight above,
+   sweeping down its left side (kept off the viewport's right edge) */
 .fab.is-open .fab__item:nth-child(1) {
-    transform: translate(0, -130px);
+    transform: translate(-18px, -140px);
     transition-delay: 0.04s;
 }
 
 .fab.is-open .fab__item:nth-child(2) {
-    transform: translate(-65px, -110px);
+    transform: translate(-70px, -122px);
     transition-delay: 0.08s;
 }
 
 .fab.is-open .fab__item:nth-child(3) {
-    transform: translate(-110px, -65px);
+    transform: translate(-110px, -88px);
     transition-delay: 0.12s;
 }
 
 .fab.is-open .fab__item:nth-child(4) {
-    transform: translate(-130px, 0);
+    transform: translate(-132px, -42px);
     transition-delay: 0.16s;
+}
+
+.fab.is-open .fab__item:nth-child(5) {
+    transform: translate(-138px, 8px);
+    transition-delay: 0.2s;
 }
 
 .fab__item--wa {
@@ -2853,7 +2871,7 @@ input[type="range"]::-moz-range-thumb {
         grid-template-columns: 1fr;
     }
     .fab {
-        right: 14px;
+        right: 2px;
         bottom: 16px;
     }
     .fab__btn {
@@ -2869,16 +2887,19 @@ input[type="range"]::-moz-range-thumb {
         height: 18px;
     }
     .fab.is-open .fab__item:nth-child(1) {
-        transform: translate(0, -92px);
+        transform: translate(2px, -86px);
     }
     .fab.is-open .fab__item:nth-child(2) {
-        transform: translate(-46px, -80px);
+        transform: translate(-34px, -80px);
     }
     .fab.is-open .fab__item:nth-child(3) {
-        transform: translate(-80px, -46px);
+        transform: translate(-64px, -58px);
     }
     .fab.is-open .fab__item:nth-child(4) {
-        transform: translate(-92px, 0);
+        transform: translate(-84px, -26px);
+    }
+    .fab.is-open .fab__item:nth-child(5) {
+        transform: translate(-88px, 6px);
     }
     .totop {
         left: 14px;
