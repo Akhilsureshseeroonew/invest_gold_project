@@ -24,27 +24,22 @@
         <div class="hero__video-overlay" aria-hidden="true"></div>
         <div class="container hero__inner">
           <div class="hero__copy">
-            <span class="eyebrow" data-reveal
-              >RBI Registered NBFC · Since 1996</span
-            >
-            <h1 data-reveal>
-              Kerala's Trusted <span class="gold-text">Gold Loan</span> &amp;
-              Finance Partner Since 1996
-            </h1>
-            <p class="hero__lead" data-reveal>
-              Instant gold, personal, consumer &amp; Mahila loans at attractive
-              rates, minimal paperwork — trusted by 10,000+ customers across
-              Kerala.
-            </p>
+            @if ($home['hero']['eyebrow'])
+              <span class="eyebrow" data-reveal>{{ $home['hero']['eyebrow'] }}</span>
+            @endif
+            <h1 data-reveal>{!! $home['hero']['heading'] !!}</h1>
+            <p class="hero__lead" data-reveal>{!! $home['hero']['lead'] !!}</p>
 
             <div class="hero__cta" data-reveal>
-              <a class="btn btn--gold" href="/contact"
-                >Apply Now
-                <svg width="16" height="16"><use href="#i-arrow-right" /></svg
-              ></a>
-              <a class="btn btn--ghost" href="/products"
-                >Explore Services</a
-              >
+              @if ($home['hero']['cta1_label'])
+                <a class="btn btn--gold" href="{{ $home['hero']['cta1_url'] ?: '#' }}">
+                  {{ $home['hero']['cta1_label'] }}
+                  <svg width="16" height="16"><use href="#i-arrow-right" /></svg>
+                </a>
+              @endif
+              @if ($home['hero']['cta2_label'])
+                <a class="btn btn--ghost" href="{{ $home['hero']['cta2_url'] ?: '#' }}">{{ $home['hero']['cta2_label'] }}</a>
+              @endif
             </div>
           </div>
 
@@ -180,10 +175,7 @@
       <section class="section" id="about">
         <div class="container">
           <div class="section-head" data-reveal>
-            <h2>
-              Empowering Financial Futures
-              <span class="gold-text">Since 1996</span>
-            </h2>
+            <h2>{!! $home['about']['heading'] !!}</h2>
             <div class="divider" aria-hidden="true">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -213,83 +205,39 @@
           </div>
 
           <div class="about__intro" data-reveal>
-            <p>
-              Invest Gold &amp; General Finance Pvt. Ltd. began in 1996 in
-              Urakam, Thrissur, founded by a group of entrepreneurs with roots
-              in Kerala's lending and chit fund sectors. Originally established
-              as Invest Chit &amp; General Finance, the company received its
-              NBFC certification from the Reserve Bank of India in 2001 — a
-              turning point that shifted our focus entirely to lending.
-            </p>
-            <p>
-              What started as a single office serving the Thrissur community has
-              grown into a trusted financial partner for families across Kerala
-              — offering gold loans, personal loans, Mahila loans, consumer
-              loans, and fixed-return investment options like NCDs and
-              Subordinated Debts.
-            </p>
-            <a
-              class="btn btn--gold"
-              href="https://wa.me/{{ config('site.whatsapp') }}"
-              target="_blank"
-              rel="noopener"
-            >
-              Talk to Our Team
-            </a>
+            {!! $home['about']['body'] !!}
+            @if ($home['about']['cta_label'])
+              <a class="btn btn--gold" href="https://wa.me/{{ preg_replace('/\D+/', '', (string) config('site.whatsapp')) }}"
+                 target="_blank" rel="noopener">{{ $home['about']['cta_label'] }}</a>
+            @endif
           </div>
 
-          <div class="about__cards" data-reveal>
-            <div class="card">
-              <div class="card-icon">
-                <svg><use href="#i-trend" /></svg>
-              </div>
-              <h3>Our Vision</h3>
-              <p>
-                A future where financial empowerment transforms lives and
-                communities.
-              </p>
+          @if (! empty($home['about']['cards']))
+            <div class="about__cards" data-reveal>
+              @foreach ($home['about']['cards'] as $card)
+                @php $card = (array) $card; @endphp
+                <div class="card">
+                  <div class="card-icon"><svg><use href="#i-{{ $card['icon'] ?? 'award' }}" /></svg></div>
+                  <h3>{{ $card['title'] ?? '' }}</h3>
+                  <p>{{ $card['text'] ?? '' }}</p>
+                </div>
+              @endforeach
             </div>
-            <div class="card">
-              <div class="card-icon">
-                <svg><use href="#i-female" /></svg>
-              </div>
-              <h3>Our Mission</h3>
-              <p>
-                To empower women and farmers with innovative financial solutions
-                that promote independence and sustainable growth.
-              </p>
-            </div>
-            <div class="card">
-              <div class="card-icon">
-                <svg><use href="#i-award" /></svg>
-              </div>
-              <h3>How We Work</h3>
-              <p>
-                No one-size-fits-all products. We take time to understand what
-                each customer actually needs before guiding them through a
-                simple, transparent process — clear terms, no hidden charges,
-                strict RBI compliance.
-              </p>
-            </div>
-          </div>
+          @endif
 
-          <!-- Invest Gold by the numbers -->
-          <div class="stats-band" data-reveal>
-          <div class="stats">
-            <div class="stat" data-reveal="zoom">
-              <b class="gold-text"><span data-count="10000">0</span>+</b
-              ><span>Customers Served</span>
+          @if (! empty($home['about']['stats']))
+            <!-- Invest Gold by the numbers -->
+            <div class="stats-band" data-reveal>
+              <div class="stats">
+                @foreach ($home['about']['stats'] as $stat)
+                  @php $stat = (array) $stat; @endphp
+                  <div class="stat" data-reveal="zoom">
+                    <b class="gold-text"><span data-count="{{ (int) ($stat['value'] ?? 0) }}">0</span>{{ $stat['suffix'] ?? '' }}</b><span>{{ $stat['label'] ?? '' }}</span>
+                  </div>
+                @endforeach
+              </div>
             </div>
-            <div class="stat" data-reveal="zoom">
-              <b class="gold-text"><span data-count="30">0</span>+</b
-              ><span>Years in Kerala</span>
-            </div>
-            <div class="stat" data-reveal="zoom">
-              <b class="gold-text"><span data-count="2001">0</span></b
-              ><span>RBI Certified</span>
-            </div>
-          </div>
-          </div>
+          @endif
         </div>
       </section>
 
@@ -297,93 +245,25 @@
       <section class="section section--alt" id="products">
         <div class="container">
           <div class="section-head" data-reveal>
-            <span class="eyebrow">What We Offer</span>
-            <h2>
-              Products Built Around <span class="gold-text">Real Life</span>
-            </h2>
-            <p>
-              Four lending products, one trusted partner — each with flexible
-              eligibility, minimal paperwork and competitive rates.
-            </p>
+            @if ($home['products']['eyebrow'])<span class="eyebrow">{{ $home['products']['eyebrow'] }}</span>@endif
+            <h2>{!! $home['products']['heading'] !!}</h2>
+            @if ($home['products']['sub'])<p>{{ $home['products']['sub'] }}</p>@endif
           </div>
 
-          <div class="grid grid--4">
-            <!-- Gold Loan -->
-            <article class="card product" data-reveal="zoom" data-tilt>
-              <span class="ribbon">Popular</span>
-              <div class="card-icon">
-                <svg><use href="#i-coin" /></svg>
-              </div>
-              <h3>Gold Loan</h3>
-              <div class="product__sub">Quick Cash Against Your Gold</div>
-              <p>
-                Unlock the value of your gold jewellery with a secure,
-                hassle-free gold loan. Attractive interest rates and flexible
-                repayment options.
-              </p>
-              <a class="link-arrow" href="/products/gold-loan"
-                >Explore Gold Loan
-                <svg width="15" height="15"><use href="#i-arrow-right" /></svg
-              ></a>
-            </article>
-
-            <!-- Personal Loan -->
-            <article class="card product" data-reveal="zoom" data-tilt>
-              <div class="card-icon">
-                <svg><use href="#i-wallet" /></svg>
-              </div>
-              <h3>Personal Loan</h3>
-              <div class="product__sub">
-                Fast, Flexible, For Every Life Goal
-              </div>
-              <p>
-                A medical emergency, a wedding or a home renovation — quick
-                approval, minimal documentation and repayment plans that fit
-                your budget.
-              </p>
-              <a class="link-arrow" href="/products/personal-loan"
-                >Explore Personal Loan
-                <svg width="15" height="15"><use href="#i-arrow-right" /></svg
-              ></a>
-            </article>
-
-            <!-- Mahila Loan -->
-            <article class="card product" data-reveal="zoom" data-tilt>
-              <div class="card-icon">
-                <svg><use href="#i-female" /></svg>
-              </div>
-              <h3>Mahila Loan</h3>
-              <div class="product__sub">Empowering Women Entrepreneurs</div>
-              <p>
-                Designed to help women start or grow a business, pursue
-                education or achieve financial independence — with subsidised,
-                supportive terms.
-              </p>
-              <a class="link-arrow" href="/products/mahila-loan"
-                >Start Your Mahila Loan
-                <svg width="15" height="15"><use href="#i-arrow-right" /></svg
-              ></a>
-            </article>
-
-            <!-- Consumer Loan -->
-            <article class="card product" data-reveal="zoom" data-tilt>
-              <div class="card-icon">
-                <svg><use href="#i-tv" /></svg>
-              </div>
-              <h3>Consumer Loan</h3>
-              <div class="product__sub">
-                Buy What You Need, Pay at Your Pace
-              </div>
-              <p>
-                From appliances to electronics and more — simple eligibility,
-                competitive rates and convenient EMI options for your next
-                purchase.
-              </p>
-              <a class="link-arrow" href="/products/consumer-loan"
-                >Explore Consumer Loan
-                <svg width="15" height="15"><use href="#i-arrow-right" /></svg
-              ></a>
-            </article>
+          <div class="grid grid--{{ min(max($productChildren->count(), 1), 4) }}">
+            @foreach ($productChildren as $child)
+              <article class="card product" data-reveal="zoom" data-tilt>
+                @if ($child->card_tag)<span class="ribbon">{{ $child->card_tag }}</span>@endif
+                <div class="card-icon"><svg><use href="#i-{{ $child->icon ?: 'coin' }}" /></svg></div>
+                <h3>{{ $child->title }}</h3>
+                @if ($child->hero_eyebrow)<div class="product__sub">{{ $child->hero_eyebrow }}</div>@endif
+                <p>{{ $child->seo_description ?: strip_tags($child->hero_lead) }}</p>
+                <a class="link-arrow" href="{{ $child->url() }}">
+                  {{ $child->card_cta ?: 'Explore '.$child->title }}
+                  <svg width="15" height="15"><use href="#i-arrow-right" /></svg>
+                </a>
+              </article>
+            @endforeach
           </div>
         </div>
       </section>
@@ -392,110 +272,52 @@
       <section class="section section--gold" id="investment">
         <div class="container">
           <div class="section-head" data-reveal>
-            <span class="eyebrow">Investments</span>
-            <h2>
-              Fixed-Return Options That
-              <span class="gold-text">Show the Numbers</span>
-            </h2>
-            <p>
-              Secured, predictable instruments for investors who want steady
-              income without market volatility. Available through private offer.
-            </p>
+            @if ($home['investments']['eyebrow'])<span class="eyebrow">{{ $home['investments']['eyebrow'] }}</span>@endif
+            <h2>{!! $home['investments']['heading'] !!}</h2>
+            @if ($home['investments']['sub'])<p>{{ $home['investments']['sub'] }}</p>@endif
           </div>
 
+          @if ($investmentChildren->isNotEmpty())
           <div class="invtl" data-reveal>
             <div class="invtl__rail" role="tablist" aria-label="Investment options">
-              <button class="invtl__step is-active" id="inv-tab-ncd" type="button"
-                      role="tab" aria-selected="true" aria-controls="inv-panel-ncd">
-                <span class="invtl__pill">Secured</span>
-                <span class="invtl__dot" aria-hidden="true"></span>
-              </button>
-              <button class="invtl__step" id="inv-tab-sub" type="button"
-                      role="tab" aria-selected="false" aria-controls="inv-panel-sub" tabindex="-1">
-                <span class="invtl__pill">5 Year Term</span>
-                <span class="invtl__dot" aria-hidden="true"></span>
-              </button>
-              <button class="invtl__step" id="inv-tab-dbl" type="button"
-                      role="tab" aria-selected="false" aria-controls="inv-panel-dbl" tabindex="-1">
-                <span class="invtl__pill">2x Target</span>
-                <span class="invtl__dot" aria-hidden="true"></span>
-              </button>
+              @foreach ($investmentChildren as $i => $child)
+                <button @class(['invtl__step', 'is-active' => $i === 0]) type="button" role="tab"
+                        aria-selected="{{ $i === 0 ? 'true' : 'false' }}" @if ($i !== 0) tabindex="-1" @endif>
+                  <span class="invtl__pill">{{ $child->card_tag ?: $child->title }}</span>
+                  <span class="invtl__dot" aria-hidden="true"></span>
+                </button>
+              @endforeach
             </div>
 
-            <!-- NCD -->
-            <article class="invtl__panel" id="inv-panel-ncd" role="tabpanel" aria-labelledby="inv-tab-ncd" tabindex="0">
-              <span class="invtl__tag">Secured</span>
-              <div class="invtl__cols">
-                <h3>Non-Convertible Debentures</h3>
-                <div class="invtl__body">
-                  <p>
-                    Fixed interest income with monthly or quarterly payouts, secured
-                    against company assets — a predictable way to grow savings
-                    without market risk.
-                  </p>
-                  <ul class="invest__list">
-                    <li><svg><use href="#i-check" /></svg> Secured against company assets</li>
-                    <li><svg><use href="#i-check" /></svg> Choose from defined tenure options</li>
-                    <li><svg><use href="#i-check" /></svg> Monthly / quarterly payout</li>
-                    <li><svg><use href="#i-check" /></svg> Transferable with company approval</li>
-                  </ul>
-                  <a class="link-arrow invtl__cta" href="/investment/ncd"
-                    >Explore NCD Options
-                    <svg width="15" height="15"><use href="#i-arrow-right" /></svg
-                  ></a>
+            @foreach ($investmentChildren as $i => $child)
+              @php
+                $points = collect($child->highlights ?? [])
+                    ->map(fn ($h) => ((array) $h)['text'] ?? ((array) $h)['title'] ?? null)
+                    ->filter()->take(4)->values()->all();
+              @endphp
+              <article class="invtl__panel" role="tabpanel" tabindex="0" @if ($i !== 0) hidden @endif>
+                @if ($child->card_tag)<span class="invtl__tag">{{ $child->card_tag }}</span>@endif
+                <div class="invtl__cols">
+                  <h3>{{ $child->title }}</h3>
+                  <div class="invtl__body">
+                    <p>{{ $child->seo_description ?: strip_tags($child->hero_lead) }}</p>
+                    @if (filled($points))
+                      <ul class="invest__list">
+                        @foreach ($points as $p)
+                          <li><svg><use href="#i-check" /></svg> {{ $p }}</li>
+                        @endforeach
+                      </ul>
+                    @endif
+                    <a class="link-arrow invtl__cta" href="{{ $child->url() }}">
+                      {{ $child->card_cta ?: 'Explore '.$child->title }}
+                      <svg width="15" height="15"><use href="#i-arrow-right" /></svg>
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </article>
-
-            <!-- Subordinated Debt -->
-            <article class="invtl__panel" id="inv-panel-sub" role="tabpanel" aria-labelledby="inv-tab-sub" tabindex="0" hidden>
-              <span class="invtl__tag">5-Year Term</span>
-              <div class="invtl__cols">
-                <h3>Subordinated Debt</h3>
-                <div class="invtl__body">
-                  <p>
-                    Fixed monthly interest payout over a 5-year term — built for
-                    long-term investors seeking reliable, predictable income from a
-                    proven lender.
-                  </p>
-                  <ul class="invest__list">
-                    <li><svg><use href="#i-check" /></svg> Fixed tenure — 60 or 72 months</li>
-                    <li><svg><use href="#i-check" /></svg> Monthly, quarterly, yearly or on maturity</li>
-                    <li><svg><use href="#i-check" /></svg> Non-marketable certificate</li>
-                    <li><svg><use href="#i-check" /></svg> Cheque / account transfer only</li>
-                  </ul>
-                  <a class="link-arrow invtl__cta" href="/investment/subordinated-debt"
-                    >Explore Subordinated Debt
-                    <svg width="15" height="15"><use href="#i-arrow-right" /></svg
-                  ></a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Doubling -->
-            <article class="invtl__panel" id="inv-panel-dbl" role="tabpanel" aria-labelledby="inv-tab-dbl" tabindex="0" hidden>
-              <span class="invtl__tag">2x Target</span>
-              <div class="invtl__cols">
-                <h3>Doubling Sub-Debt Scheme</h3>
-                <div class="invtl__body">
-                  <p>
-                    A 72-month plan that states your target maturity benefit — 2x
-                    your investment — right on your certificate from day one.
-                  </p>
-                  <ul class="invest__list">
-                    <li><svg><use href="#i-check" /></svg> 72-month tenure, 60-month lock-in</li>
-                    <li><svg><use href="#i-check" /></svg> Invest ₹10,000 – ₹1 Crore</li>
-                    <li><svg><use href="#i-check" /></svg> Target benefit stated in writing</li>
-                    <li><svg><use href="#i-check" /></svg> TDS as per applicable IT rules</li>
-                  </ul>
-                  <a class="link-arrow invtl__cta" href="/investment/doubling-scheme"
-                    >Explore the Doubling Scheme
-                    <svg width="15" height="15"><use href="#i-arrow-right" /></svg
-                  ></a>
-                </div>
-              </div>
-            </article>
+              </article>
+            @endforeach
           </div>
+          @endif
         </div>
       </section>
 
@@ -504,13 +326,9 @@
       <section class="section section--alt" id="calculator">
         <div class="container">
           <div class="section-head" data-reveal>
-            <span class="eyebrow">Instant Estimate</span>
-            <h2>Loan <span class="gold-text">Calculator</span></h2>
-            <p>
-              Choose your loan type and get an instant estimate — gold loan
-              eligibility, or the monthly EMI on a personal, Mahila or consumer
-              loan.
-            </p>
+            @if ($home['calculator']['eyebrow'])<span class="eyebrow">{{ $home['calculator']['eyebrow'] }}</span>@endif
+            <h2>{!! $home['calculator']['heading'] !!}</h2>
+            @if ($home['calculator']['sub'])<p>{{ $home['calculator']['sub'] }}</p>@endif
           </div>
 
           <x-site.calculator-hub />
@@ -521,87 +339,36 @@
       <section class="section" id="why">
         <div class="container">
           <div class="section-head" data-reveal>
-            <span class="eyebrow">Why Choose Us</span>
-            <h2>
-              What Makes Invest Gold
-              <span class="gold-text">Kerala's Preferred NBFC</span>
-            </h2>
-            <p>
-              From a single branch started in 1996 to a name families trust
-              across Kerala today — here's what backs every loan and investment
-              we offer.
-            </p>
+            @if ($home['why']['eyebrow'])<span class="eyebrow">{{ $home['why']['eyebrow'] }}</span>@endif
+            <h2>{!! $home['why']['heading'] !!}</h2>
+            @if ($home['why']['sub'])<p>{{ $home['why']['sub'] }}</p>@endif
           </div>
 
-          <div class="why">
-            <article class="card" data-reveal="zoom">
-              <span class="why__num">01</span>
-              <div class="card-icon">
-                <svg><use href="#i-shield" /></svg>
-              </div>
-              <h3>RBI Registered NBFC</h3>
-              <p>
-                A fully regulated, RBI-registered non-banking finance company —
-                every product follows strict compliance and fair-practice norms,
-                so you're protected by more than just our word.
-              </p>
-            </article>
-            <article class="card" data-reveal="zoom">
-              <span class="why__num">02</span>
-              <div class="card-icon">
-                <svg><use href="#i-building" /></svg>
-              </div>
-              <h3>Serving Kerala Since 1996</h3>
-              <p>
-                What began as a single office in Thrissur has grown into a
-                trusted network of branches reaching families statewide — the
-                same values, now closer to you.
-              </p>
-            </article>
-            <article class="card" data-reveal="zoom">
-              <span class="why__num">03</span>
-              <div class="card-icon">
-                <svg><use href="#i-users" /></svg>
-              </div>
-              <h3>One Team, Every Need</h3>
-              <p>
-                From gold and personal loans to Mahila loans, NCDs and
-                Subordinated Debt — a single trusted partner for both your
-                borrowing and your savings goals.
-              </p>
-            </article>
-            <article class="card" data-reveal="zoom">
-              <span class="why__num">04</span>
-              <div class="card-icon">
-                <svg><use href="#i-doc" /></svg>
-              </div>
-              <h3>Transparent Terms, Always</h3>
-              <p>
-                No hidden charges, no fine-print surprises. Every rate, term and
-                repayment schedule is laid out clearly — track it all with our
-                online live passbook on the mobile app.
-              </p>
-            </article>
-          </div>
+          @if (! empty($home['why']['cards']))
+            <div class="why">
+              @foreach ($home['why']['cards'] as $card)
+                @php $card = (array) $card; @endphp
+                <article class="card" data-reveal="zoom">
+                  <span class="why__num">{{ $card['num'] ?? '' }}</span>
+                  <div class="card-icon"><svg><use href="#i-{{ $card['icon'] ?? 'shield' }}" /></svg></div>
+                  <h3>{{ $card['title'] ?? '' }}</h3>
+                  <p>{{ $card['text'] ?? '' }}</p>
+                </article>
+              @endforeach
+            </div>
+          @endif
 
-          <div
-            class="hero__badges"
-            style="margin-top: clamp(1.8rem, 4vw, 2.8rem)"
-          >
-            <div class="badge" data-reveal="zoom">
-              <svg><use href="#i-shield" /></svg>
-              <b>RBI</b><span>Registered NBFC</span>
+          @if (! empty($home['why']['badges']))
+            <div class="hero__badges" style="margin-top: clamp(1.8rem, 4vw, 2.8rem)">
+              @foreach ($home['why']['badges'] as $badge)
+                @php $badge = (array) $badge; @endphp
+                <div class="badge" data-reveal="zoom">
+                  <svg><use href="#i-{{ $badge['icon'] ?? 'shield' }}" /></svg>
+                  <b>{{ $badge['value'] ?? '' }}</b><span>{{ $badge['label'] ?? '' }}</span>
+                </div>
+              @endforeach
             </div>
-            <div class="badge" data-reveal="zoom">
-              <svg><use href="#i-users" /></svg>
-              <b><span data-count="10000">0</span>+</b
-              ><span>Happy Customers</span>
-            </div>
-            <div class="badge" data-reveal="zoom">
-              <svg><use href="#i-building" /></svg>
-              <b>Kerala</b><span>Branches Statewide</span>
-            </div>
-          </div>
+          @endif
         </div>
       </section>
 
@@ -609,131 +376,39 @@
       <section class="section section--deep" id="testimonials">
         <div class="container">
           <div class="section-head" data-reveal>
-            <span class="eyebrow">Customer Stories</span>
-            <h2>Trusted by <span class="gold-text">10,000+ Families</span></h2>
+            @if ($home['testimonials']['eyebrow'])<span class="eyebrow">{{ $home['testimonials']['eyebrow'] }}</span>@endif
+            <h2>{!! $home['testimonials']['heading'] !!}</h2>
+            @if (! empty($home['testimonials']['sub']))<p>{{ $home['testimonials']['sub'] }}</p>@endif
           </div>
 
+          @if ($testimonials->isNotEmpty())
           <div class="tcar" id="tcar" data-reveal>
-            <button
-              class="tcar__nav tcar__nav--prev"
-              type="button"
-              aria-label="Previous story"
-            >
+            <button class="tcar__nav tcar__nav--prev" type="button" aria-label="Previous story">
               <svg width="20" height="20"><use href="#i-chev-left" /></svg>
             </button>
             <div class="tcar__viewport">
               <div class="tcar__track" id="tcarTrack">
-                <div class="tslide">
-                  <div class="tslide__card">
-                    <span class="tslide__avatar">R</span>
-                    <div class="stars">
-                      <svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg>
+                @foreach ($testimonials as $t)
+                  <div class="tslide">
+                    <div class="tslide__card">
+                      <span class="tslide__avatar">{{ $t->initial() }}</span>
+                      <div class="stars">
+                        @for ($s = 0; $s < $t->stars(); $s++)<svg><use href="#i-star" /></svg>@endfor
+                      </div>
+                      <q>{{ $t->quote }}</q>
+                      <div class="tslide__name">{{ $t->name }}</div>
+                      @if ($t->location)<div class="tslide__loc">{{ $t->location }}</div>@endif
                     </div>
-                    <q
-                      >Quick, transparent and genuinely hassle-free. The
-                      valuation was explained clearly, the paperwork was
-                      minimal, and the whole process felt effortless from start
-                      to finish.</q
-                    >
-                    <div class="tslide__name">Radhika S.</div>
-                    <div class="tslide__loc">Thrissur</div>
                   </div>
-                </div>
-
-                <div class="tslide">
-                  <div class="tslide__card">
-                    <span class="tslide__avatar">M</span>
-                    <div class="stars">
-                      <svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg>
-                    </div>
-                    <q
-                      >I needed funds urgently, and Invest Gold delivered —
-                      same-day approval, no unnecessary delays. That kind of
-                      reliability is hard to find elsewhere.</q
-                    >
-                    <div class="tslide__name">Manoj K.</div>
-                    <div class="tslide__loc">Irinjalakuda</div>
-                  </div>
-                </div>
-
-                <div class="tslide">
-                  <div class="tslide__card">
-                    <span class="tslide__avatar">S</span>
-                    <div class="stars">
-                      <svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg>
-                    </div>
-                    <q
-                      >The Mahila Loan helped me expand my tailoring unit into a
-                      proper shop. The team guided me through every document and
-                      the repayment fits my cash flow.</q
-                    >
-                    <div class="tslide__name">Sreelatha P.</div>
-                    <div class="tslide__loc">Kunnamkulam</div>
-                  </div>
-                </div>
-
-                <div class="tslide">
-                  <div class="tslide__card">
-                    <span class="tslide__avatar">A</span>
-                    <div class="stars">
-                      <svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg>
-                    </div>
-                    <q
-                      >I have held a Subordinated Debt certificate for three
-                      years. The monthly payout has arrived on time, every time,
-                      and the statements are always clear.</q
-                    >
-                    <div class="tslide__name">Anil Kumar V.</div>
-                    <div class="tslide__loc">Guruvayur</div>
-                  </div>
-                </div>
-
-                <div class="tslide">
-                  <div class="tslide__card">
-                    <span class="tslide__avatar">F</span>
-                    <div class="stars">
-                      <svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg
-                      ><svg><use href="#i-star" /></svg>
-                    </div>
-                    <q
-                      >The live passbook on the app is the best part — I can
-                      check my interest due and pay from home instead of
-                      travelling to the branch every month.</q
-                    >
-                    <div class="tslide__name">Fathima N.</div>
-                    <div class="tslide__loc">Chavakkad</div>
-                  </div>
-                </div>
+                @endforeach
               </div>
             </div>
-            <button
-              class="tcar__nav tcar__nav--next"
-              type="button"
-              aria-label="Next story"
-            >
+            <button class="tcar__nav tcar__nav--next" type="button" aria-label="Next story">
               <svg width="20" height="20"><use href="#i-chev-right" /></svg>
             </button>
             <div class="tcar__dots" id="tcarDots"></div>
           </div>
+          @endif
         </div>
       </section>
 
@@ -741,41 +416,23 @@
       <section class="section" id="app">
         <div class="container app">
           <div data-reveal="left">
-            <span class="eyebrow">Invest Gold Mobile App</span>
-            <h2 style="margin: 1.1rem 0 1rem">
-              Manage Your Loans <span class="gold-text">Anytime, Anywhere</span>
-            </h2>
-            <p>
-              The Invest Gold Mobile App brings all your financial services
-              together in one secure, easy-to-use platform. Apply for loans,
-              manage your accounts, pay interest, track transactions and access
-              our services from anywhere.
-            </p>
-            <ul class="app__list">
-              <li>
-                <svg><use href="#i-check" /></svg> Apply for gold, personal,
-                Mahila &amp; consumer loans
-              </li>
-              <li>
-                <svg><use href="#i-check" /></svg> Online live passbook with
-                real-time balances
-              </li>
-              <li>
-                <svg><use href="#i-check" /></svg> Pay interest and EMIs
-                securely in a few taps
-              </li>
-              <li>
-                <svg><use href="#i-check" /></svg> Branch locator, gold
-                calculator and instant support
-              </li>
-            </ul>
+            @if ($home['app']['eyebrow'])<span class="eyebrow">{{ $home['app']['eyebrow'] }}</span>@endif
+            <h2 style="margin: 1.1rem 0 1rem">{!! $home['app']['heading'] !!}</h2>
+            @if ($home['app']['lead'])<p>{!! $home['app']['lead'] !!}</p>@endif
+            @if (! empty($home['app']['features']))
+              <ul class="app__list">
+                @foreach ($home['app']['features'] as $feature)
+                  <li><svg><use href="#i-check" /></svg> {!! $feature !!}</li>
+                @endforeach
+              </ul>
+            @endif
             @php
               $playUrl  = \App\Support\Site::normalizeUrl(config('site.app.play_store'));
               $appleUrl = \App\Support\Site::normalizeUrl(config('site.app.apple_store'));
             @endphp
             @if ($playUrl || $appleUrl)
               <h3 style="font-size: 1.05rem; margin-bottom: 0.9rem">
-                Download Now
+                {{ $home['app']['download_heading'] ?: 'Download Now' }}
               </h3>
               <div class="store">
                 @if ($playUrl)
@@ -1199,14 +856,9 @@
       <section class="section section--alt" id="news">
         <div class="container">
           <div class="section-head" data-reveal>
-            <span class="eyebrow">News &amp; Events</span>
-            <h2>
-              What's Happening at <span class="gold-text">Invest Gold</span>
-            </h2>
-            <p>
-              Branch launches, community initiatives and company milestones from
-              across Kerala.
-            </p>
+            @if ($home['news']['eyebrow'])<span class="eyebrow">{!! $home['news']['eyebrow'] !!}</span>@endif
+            <h2>{!! $home['news']['heading'] !!}</h2>
+            @if ($home['news']['sub'])<p>{{ $home['news']['sub'] }}</p>@endif
           </div>
 
           <div class="grid grid--3">
@@ -1223,104 +875,25 @@
       <section class="section" id="faq">
         <div class="container">
           <div class="section-head" data-reveal>
-            <span class="eyebrow">FAQ</span>
-            <h2>Questions, <span class="gold-text">Answered</span></h2>
+            @if ($home['faq']['eyebrow'])<span class="eyebrow">{{ $home['faq']['eyebrow'] }}</span>@endif
+            <h2>{!! $home['faq']['heading'] !!}</h2>
           </div>
 
+          @if ($faqs->isNotEmpty())
           <div class="faq" id="faqList">
-            <div class="acc" data-reveal>
-              <button class="acc__btn" type="button" aria-expanded="false">
-                Is Invest Gold General Finance a legitimate, RBI-registered
-                company?
-                <span class="acc__icon"
-                  ><svg width="14" height="14"><use href="#i-plus" /></svg
-                ></span>
-              </button>
-              <div class="acc__panel">
-                <div>
-                  <p>
-                    Yes. We are a fully RBI-registered NBFC operating in Kerala
-                    since 1996, with every loan and investment product following
-                    strict compliance and fair-practice norms.
-                  </p>
+            @foreach ($faqs as $faq)
+              <div class="acc" data-reveal>
+                <button class="acc__btn" type="button" aria-expanded="false">
+                  {{ $faq->question }}
+                  <span class="acc__icon"><svg width="14" height="14"><use href="#i-plus" /></svg></span>
+                </button>
+                <div class="acc__panel">
+                  <div>{!! $faq->answer !!}</div>
                 </div>
               </div>
-            </div>
-
-            <div class="acc" data-reveal>
-              <button class="acc__btn" type="button" aria-expanded="false">
-                How long has Invest Gold been operating in Kerala?
-                <span class="acc__icon"
-                  ><svg width="14" height="14"><use href="#i-plus" /></svg
-                ></span>
-              </button>
-              <div class="acc__panel">
-                <div>
-                  <p>
-                    Since 1996 — starting as a single office in Thrissur and
-                    growing into a trusted network of branches serving families
-                    statewide.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="acc" data-reveal>
-              <button class="acc__btn" type="button" aria-expanded="false">
-                What types of loans does Invest Gold offer?
-                <span class="acc__icon"
-                  ><svg width="14" height="14"><use href="#i-plus" /></svg
-                ></span>
-              </button>
-              <div class="acc__panel">
-                <div>
-                  <p>
-                    Gold Loans, Personal Loans, Mahila Loans and Consumer Loans
-                    — each with flexible eligibility, minimal paperwork and
-                    competitive rates.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="acc" data-reveal>
-              <button class="acc__btn" type="button" aria-expanded="false">
-                Does Invest Gold offer investment options, not just loans?
-                <span class="acc__icon"
-                  ><svg width="14" height="14"><use href="#i-plus" /></svg
-                ></span>
-              </button>
-              <div class="acc__panel">
-                <div>
-                  <p>
-                    Yes — we offer Non-Convertible Debentures (NCDs),
-                    Subordinated Debts and the Doubling Sub-Debt Scheme:
-                    fixed-return investment instruments for customers looking to
-                    grow their savings securely, through private offers. Contact
-                    us to learn more.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="acc" data-reveal>
-              <button class="acc__btn" type="button" aria-expanded="false">
-                Does Invest Gold have a mobile app?
-                <span class="acc__icon"
-                  ><svg width="14" height="14"><use href="#i-plus" /></svg
-                ></span>
-              </button>
-              <div class="acc__panel">
-                <div>
-                  <p>
-                    Yes — the Invest Gold app lets you apply for loans, manage
-                    your account, pay interest and track transactions anytime.
-                    Available on the Play Store and App Store.
-                  </p>
-                </div>
-              </div>
-            </div>
+            @endforeach
           </div>
+          @endif
         </div>
       </section>
 
@@ -1328,14 +901,9 @@
       <section class="section section--alt" id="contact">
         <div class="container">
           <div class="section-head" data-reveal>
-            <span class="eyebrow">Get in Touch</span>
-            <h2>
-              Reach Out — <span class="gold-text">We're Ready to Help</span>
-            </h2>
-            <p>
-              Have a question or need assistance? Fill out the form and our team
-              will get back to you shortly.
-            </p>
+            @if ($home['contact']['eyebrow'])<span class="eyebrow">{{ $home['contact']['eyebrow'] }}</span>@endif
+            <h2>{!! $home['contact']['heading'] !!}</h2>
+            @if ($home['contact']['sub'])<p>{{ $home['contact']['sub'] }}</p>@endif
           </div>
 
           <div class="enquiry">

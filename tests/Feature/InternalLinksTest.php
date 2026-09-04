@@ -73,6 +73,23 @@ class InternalLinksTest extends TestCase
         $this->get('/calculator')->assertRedirect('/#calculator');
     }
 
+    public function test_calculator_covers_loans_and_investments(): void
+    {
+        $html = $this->get('/')->assertOk()->getContent();
+
+        // all seven products in the selector
+        foreach (['Gold Loan', 'Personal Loan', 'Mahila Loan', 'Consumer Loan',
+                  'NCD', 'Subordinated Debt', 'Doubling Sub-Debt'] as $label) {
+            $this->assertStringContainsString('>'.$label.'</span>', $html);
+        }
+        // the three calculator panels + the investment engine hook
+        $this->assertStringContainsString('id="calcGold"', $html);
+        $this->assertStringContainsString('id="calcEmi"', $html);
+        $this->assertStringContainsString('id="calcInvest"', $html);
+        $this->assertStringContainsString('data-invest-calc', $html);
+        $this->assertStringContainsString('data-invest-rates', $html);
+    }
+
     public function test_investment_scheme_enquiry_links_use_correct_service(): void
     {
         $map = [

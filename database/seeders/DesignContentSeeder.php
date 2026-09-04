@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Branch;
+use App\Models\Faq;
 use App\Models\InterestRateScheme;
 use App\Models\JobOpening;
 use App\Models\MenuItem;
@@ -11,6 +12,7 @@ use App\Models\Page;
 use App\Models\Policy;
 use App\Models\Post;
 use App\Models\Setting;
+use App\Models\Testimonial;
 use App\Support\Settings;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -25,11 +27,80 @@ class DesignContentSeeder extends Seeder
     public function run(): void
     {
         $this->seedSettings();
+        $this->seedHomepage();
         $this->seedPages();
         $this->seedMenu();
         $this->seedCollections();
+        $this->seedTestimonials();
+        $this->seedFaqs();
 
         Settings::flush();
+    }
+
+    /** Seed config/home.php defaults as flat "home.<dot.path>" settings rows. */
+    protected function seedHomepage(): void
+    {
+        $flatten = function ($node, $prefix, &$out) use (&$flatten) {
+            foreach ($node as $key => $value) {
+                $path = $prefix === '' ? (string) $key : "$prefix.$key";
+                // stop at repeaters / scalar leaves; only recurse plain assoc maps
+                if (is_array($value) && array_keys($value) !== range(0, count($value) - 1) && $value !== []) {
+                    $flatten($value, $path, $out);
+                } else {
+                    $out[$path] = $value;
+                }
+            }
+        };
+
+        $flat = [];
+        $flatten(config('home', []), '', $flat);
+
+        foreach ($flat as $path => $value) {
+            Setting::firstOrCreate(
+                ['key' => "home.$path"],
+                ['group' => 'home', 'value' => ['v' => $value]],
+            );
+        }
+    }
+
+    protected function seedTestimonials(): void
+    {
+        $items = [
+            ['Radhika S.', 'Thrissur', 'Quick, transparent and genuinely hassle-free. The valuation was explained clearly, the paperwork was minimal, and the whole process felt effortless from start to finish.'],
+            ['Manoj K.', 'Irinjalakuda', 'I needed funds urgently, and Invest Gold delivered — same-day approval, no unnecessary delays. That kind of reliability is hard to find elsewhere.'],
+            ['Sreelatha P.', 'Kunnamkulam', 'The Mahila Loan helped me expand my tailoring unit into a proper shop. The team guided me through every document and the repayment fits my cash flow.'],
+            ['Anil Kumar V.', 'Guruvayur', 'I have held a Subordinated Debt certificate for three years. The monthly payout has arrived on time, every time, and the statements are always clear.'],
+            ['Fathima N.', 'Chavakkad', 'The live passbook on the app is the best part — I can check my interest due and pay from home instead of travelling to the branch every month.'],
+        ];
+        Testimonial::whereNotIn('name', array_column($items, 0))->delete();
+        foreach ($items as $i => [$name, $loc, $quote]) {
+            Testimonial::firstOrCreate(['name' => $name], [
+                'location' => $loc, 'quote' => $quote, 'rating' => 5,
+                'is_published' => true, 'sort_order' => $i,
+            ]);
+        }
+    }
+
+    protected function seedFaqs(): void
+    {
+        $items = [
+            ['Is Invest Gold General Finance a legitimate, RBI-registered company?',
+                '<p>Yes. We are a fully RBI-registered NBFC operating in Kerala since 1996, with every loan and investment product following strict compliance and fair-practice norms.</p>'],
+            ['How long has Invest Gold been operating in Kerala?',
+                '<p>Since 1996 — starting as a single office in Thrissur and growing into a trusted network of branches serving families statewide.</p>'],
+            ['What types of loans does Invest Gold offer?',
+                '<p>Gold Loans, Personal Loans, Mahila Loans and Consumer Loans — each with flexible eligibility, minimal paperwork and competitive rates.</p>'],
+            ['Does Invest Gold offer investment options, not just loans?',
+                '<p>Yes — we offer Non-Convertible Debentures (NCDs), Subordinated Debts and the Doubling Sub-Debt Scheme: fixed-return investment instruments for customers looking to grow their savings securely, through private offers. Contact us to learn more.</p>'],
+            ['Does Invest Gold have a mobile app?',
+                '<p>Yes — the Invest Gold app lets you apply for loans, manage your account, pay interest and track transactions anytime. Available on the Play Store and App Store.</p>'],
+        ];
+        Faq::whereNotIn('question', array_column($items, 0))->delete();
+        foreach ($items as $i => [$q, $a]) {
+            Faq::firstOrCreate(['question' => $q], [
+                'answer' => $a, 'is_published' => true, 'sort_order' => $i,
+            ]);
+        }
     }
 
     /* ---------------------------------------------------------------- settings */
@@ -67,13 +138,19 @@ class DesignContentSeeder extends Seeder
                 'site.app.apple_store' => config('site.app.apple_store'),
             ],
             'calculator' => [
-                'site.calculator.gold_rate_per_gram'    => config('site.calculator.gold_rate_per_gram'),
+                'site.calculator.gold_rate_24k'         => config('site.calculator.gold_rate_24k'),
+                'site.calculator.gold_rate_22k'         => config('site.calculator.gold_rate_22k'),
+                'site.calculator.gold_rate_21k'         => config('site.calculator.gold_rate_21k'),
+                'site.calculator.gold_rate_18k'         => config('site.calculator.gold_rate_18k'),
                 'site.calculator.max_ltv_percent'       => config('site.calculator.max_ltv_percent'),
                 'site.calculator.default_interest_pa'   => config('site.calculator.default_interest_pa'),
                 'site.calculator.default_tenure_months' => config('site.calculator.default_tenure_months'),
                 'site.calculator.personal_loan_rate'    => config('site.calculator.personal_loan_rate'),
                 'site.calculator.mahila_loan_rate'      => config('site.calculator.mahila_loan_rate'),
                 'site.calculator.consumer_loan_rate'    => config('site.calculator.consumer_loan_rate'),
+                'site.calculator.ncd_rate'               => config('site.calculator.ncd_rate'),
+                'site.calculator.subordinated_debt_rate' => config('site.calculator.subordinated_debt_rate'),
+                'site.calculator.doubling_years'         => config('site.calculator.doubling_years'),
             ],
         ];
 

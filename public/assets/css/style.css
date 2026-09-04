@@ -162,6 +162,9 @@ html {
     scroll-behavior: smooth;
     scroll-padding-top: calc(var(--nav-h) + 18px);
     -webkit-text-size-adjust: 100%;
+    /* keep the viewport still when in-page panels (e.g. the calculator) change
+       height — don't let the browser scroll-anchor and shift what you're looking at */
+    overflow-anchor: none;
 }
 body {
     font-family: var(--font-body);
@@ -2511,8 +2514,8 @@ input[type="range"]::-moz-range-thumb {
 /* when open, grow the hover region so the pointer can travel from the mascot
    to any fanned-out icon without crossing "dead" space */
 .fab.is-open .fab__panel {
-    width: 210px;
-    height: 215px;
+    width: 260px;
+    height: 315px;
     pointer-events: auto;
 }
 
@@ -2568,30 +2571,30 @@ input[type="range"]::-moz-range-thumb {
     pointer-events: auto;
 }
 
-/* icons fan out in an arc that wraps the mascot — from straight above,
-   sweeping down its left side (kept off the viewport's right edge) */
+/* icons fan out in a shallow arc well clear of the mascot's body, down its
+   LEFT side (kept off the viewport's right edge) */
 .fab.is-open .fab__item:nth-child(1) {
-    transform: translate(-18px, -140px);
+    transform: translate(-176px, -202px);
     transition-delay: 0.04s;
 }
 
 .fab.is-open .fab__item:nth-child(2) {
-    transform: translate(-70px, -122px);
+    transform: translate(-192px, -140px);
     transition-delay: 0.08s;
 }
 
 .fab.is-open .fab__item:nth-child(3) {
-    transform: translate(-110px, -88px);
+    transform: translate(-196px, -78px);
     transition-delay: 0.12s;
 }
 
 .fab.is-open .fab__item:nth-child(4) {
-    transform: translate(-132px, -42px);
+    transform: translate(-188px, -16px);
     transition-delay: 0.16s;
 }
 
 .fab.is-open .fab__item:nth-child(5) {
-    transform: translate(-138px, 8px);
+    transform: translate(-150px, -262px);
     transition-delay: 0.2s;
 }
 
@@ -2887,19 +2890,19 @@ input[type="range"]::-moz-range-thumb {
         height: 18px;
     }
     .fab.is-open .fab__item:nth-child(1) {
-        transform: translate(2px, -86px);
+        transform: translate(-98px, -150px);
     }
     .fab.is-open .fab__item:nth-child(2) {
-        transform: translate(-34px, -80px);
+        transform: translate(-114px, -100px);
     }
     .fab.is-open .fab__item:nth-child(3) {
-        transform: translate(-64px, -58px);
+        transform: translate(-118px, -50px);
     }
     .fab.is-open .fab__item:nth-child(4) {
-        transform: translate(-84px, -26px);
+        transform: translate(-110px, 0);
     }
     .fab.is-open .fab__item:nth-child(5) {
-        transform: translate(-88px, 6px);
+        transform: translate(-84px, -196px);
     }
     .totop {
         left: 14px;

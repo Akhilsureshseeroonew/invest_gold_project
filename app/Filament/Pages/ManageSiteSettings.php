@@ -58,13 +58,19 @@ class ManageSiteSettings extends Page implements HasForms
         'social_x'            => 'site.social.x',
         'app_play_store'      => 'site.app.play_store',
         'app_apple_store'     => 'site.app.apple_store',
-        'calc_gold_rate'      => 'site.calculator.gold_rate_per_gram',
+        'calc_gold_24k'       => 'site.calculator.gold_rate_24k',
+        'calc_gold_22k'       => 'site.calculator.gold_rate_22k',
+        'calc_gold_21k'       => 'site.calculator.gold_rate_21k',
+        'calc_gold_18k'       => 'site.calculator.gold_rate_18k',
         'calc_max_ltv'        => 'site.calculator.max_ltv_percent',
         'calc_interest'       => 'site.calculator.default_interest_pa',
         'calc_tenure'         => 'site.calculator.default_tenure_months',
         'calc_personal_rate'  => 'site.calculator.personal_loan_rate',
         'calc_mahila_rate'    => 'site.calculator.mahila_loan_rate',
         'calc_consumer_rate'  => 'site.calculator.consumer_loan_rate',
+        'calc_ncd_rate'       => 'site.calculator.ncd_rate',
+        'calc_sd_rate'        => 'site.calculator.subordinated_debt_rate',
+        'calc_doubling_years' => 'site.calculator.doubling_years',
     ];
 
     public ?array $data = [];
@@ -133,8 +139,16 @@ class ManageSiteSettings extends Page implements HasForms
                             ->placeholder('https://apps.apple.com/app/id…'),
                     ]),
                     Tabs\Tab::make('Calculator defaults')->schema([
-                        Section::make('Gold Loan calculator')->columns(2)->schema([
-                            TextInput::make('calc_gold_rate')->label('Gold rate per gram (22K, ₹)')->numeric(),
+                        Section::make('Gold rate per gram (₹)')
+                            ->description("Today's published branch rate for each karat. The gold calculator uses the rate for the purity the visitor selects.")
+                            ->columns(4)
+                            ->schema([
+                                TextInput::make('calc_gold_24k')->label('24K (999)')->numeric()->prefix('₹'),
+                                TextInput::make('calc_gold_22k')->label('22K (916)')->numeric()->prefix('₹'),
+                                TextInput::make('calc_gold_21k')->label('21K (875)')->numeric()->prefix('₹'),
+                                TextInput::make('calc_gold_18k')->label('18K (750)')->numeric()->prefix('₹'),
+                            ]),
+                        Section::make('Gold Loan calculator')->columns(3)->schema([
                             TextInput::make('calc_max_ltv')->label('Max loan-to-value (%)')->numeric(),
                             TextInput::make('calc_interest')->label('Interest p.a. (%)')->numeric(),
                             TextInput::make('calc_tenure')->label('Default tenure (months)')->numeric(),
@@ -146,6 +160,14 @@ class ManageSiteSettings extends Page implements HasForms
                                 TextInput::make('calc_personal_rate')->label('Personal Loan')->numeric()->suffix('%'),
                                 TextInput::make('calc_mahila_rate')->label('Mahila Loan')->numeric()->suffix('%'),
                                 TextInput::make('calc_consumer_rate')->label('Consumer Loan')->numeric()->suffix('%'),
+                            ]),
+                        Section::make('Investment calculator')
+                            ->description('Indicative annual return used by the investment calculator (compounded yearly). The Doubling scheme shows a 2× return over the number of years set here.')
+                            ->columns(3)
+                            ->schema([
+                                TextInput::make('calc_ncd_rate')->label('NCD return p.a.')->numeric()->suffix('%'),
+                                TextInput::make('calc_sd_rate')->label('Subordinated Debt return p.a.')->numeric()->suffix('%'),
+                                TextInput::make('calc_doubling_years')->label('Doubling scheme — years to 2×')->numeric()->suffix('yrs'),
                             ]),
                     ]),
                 ]),

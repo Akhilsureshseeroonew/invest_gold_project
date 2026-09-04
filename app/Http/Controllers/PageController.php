@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\Faq;
 use App\Models\InterestRateScheme;
 use App\Models\JobOpening;
 use App\Models\NewsItem;
 use App\Models\Page;
 use App\Models\Policy;
 use App\Models\Post;
+use App\Models\Testimonial;
+use App\Support\Homepage;
 use Illuminate\Support\Str;
 
 class PageController extends Controller
@@ -20,7 +23,13 @@ class PageController extends Controller
 
         return view('pages.home', [
             'page' => $page,
+            'home' => Homepage::all(),
             'news' => NewsItem::published()->orderByDesc('published_at')->take(3)->get(),
+            'productChildren' => Page::query()->published()->childrenOf('products')->get(),
+            'investmentChildren' => Page::query()->published()->childrenOf('investment')
+                ->where('template', '!=', 'interest-rates')->get(),
+            'testimonials' => Testimonial::published()->ordered()->get(),
+            'faqs' => Faq::published()->ordered()->get(),
         ]);
     }
 

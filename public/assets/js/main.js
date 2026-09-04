@@ -240,8 +240,22 @@
 
     function compute() {
       var mode = sw.getAttribute("data-mode");
-      var purity = parseFloat(el.purity.value) || 1;
-      var rate = parseFloat(el.rate.value) || 0;
+      // The purity <option> now carries the admin-set ₹/gram rate for that karat
+      // (a value > 100). Older markup carried a purity multiplier (~1) plus a
+      // separate #gRate field — both cases handled here.
+      var purityVal = parseFloat(el.purity && el.purity.value) || 0;
+      var rate, purity;
+      if (purityVal > 100) {
+        rate = purityVal;
+        purity = 1;
+      } else {
+        rate =
+          parseFloat(
+            (el.rate.dataset && el.rate.dataset.rate) ||
+              String(el.rate.value).replace(/[^\d.]/g, ""),
+          ) || 0;
+        purity = purityVal || 1;
+      }
       var months = parseInt(el.tenure.value, 10);
       var interest = parseFloat(el.interest.value);
 
@@ -252,6 +266,12 @@
         interest.toFixed(2).replace(/\.00$/, "") + "%";
       [el.weight, el.amount, el.tenure, el.interest].forEach(paintRange);
 
+      // total interest over the tenure (simple interest — gold loans are
+      // interest-serviced, not amortised)
+      var totalInterest = function (principal) {
+        return (principal * interest * months) / (100 * 12);
+      };
+
       if (mode === "gold") {
         var grams = parseFloat(el.weight.value);
         var goldValue = grams * rate * purity;
@@ -260,7 +280,7 @@
         el.amountOutBig.textContent = money(eligible);
         el.metaALabel.textContent = "Gold value";
         el.metaA.textContent = money(goldValue);
-        el.metaC.textContent = money(emi(eligible, interest, months));
+        el.metaC.textContent = money(totalInterest(eligible));
       } else {
         var cash = parseFloat(el.amount.value);
         var neededValue = cash / LTV;
@@ -269,7 +289,7 @@
         el.amountOutBig.textContent = gramsNeeded.toFixed(1) + " g";
         el.metaALabel.textContent = "Gold value needed";
         el.metaA.textContent = money(neededValue);
-        el.metaC.textContent = money(emi(cash, interest, months));
+        el.metaC.textContent = money(totalInterest(cash));
       }
       el.metaB.textContent = LTV * 100 + "%";
     }

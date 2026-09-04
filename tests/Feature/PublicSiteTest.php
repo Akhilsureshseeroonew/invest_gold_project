@@ -154,10 +154,10 @@ class PublicSiteTest extends TestCase
 
         $html = $this->get('/')->assertOk()->getContent();
 
-        // only the two platforms with a link set show an icon — 3 spots each
-        // (header, footer, side-mascot); Instagram had https:// prepended
-        $this->assertSame(3, substr_count($html, 'href="https://facebook.com/investgold"'));
-        $this->assertSame(3, substr_count($html, 'href="https://instagram.com/investgold"'));
+        // only the two platforms with a link set show an icon — 2 spots each
+        // (header nav + footer nav); Instagram had https:// prepended
+        $this->assertSame(2, substr_count($html, 'href="https://facebook.com/investgold"'));
+        $this->assertSame(2, substr_count($html, 'href="https://instagram.com/investgold"'));
 
         // the platforms with no link ("#" youtube, blank linkedin, unset x) show no icon at all
         $this->assertStringNotContainsString('#i-youtube', $html);
@@ -166,7 +166,7 @@ class PublicSiteTest extends TestCase
         $this->assertStringNotContainsString('aria-label="YouTube"', $html);
     }
 
-    public function test_no_social_links_hides_the_icon_rows_and_side_mascot(): void
+    public function test_no_social_links_hides_the_nav_icons(): void
     {
         config([
             'site.social.facebook' => null, 'site.social.instagram' => null,
@@ -176,7 +176,20 @@ class PublicSiteTest extends TestCase
         $html = $this->get('/')->assertOk()->getContent();
 
         $this->assertStringNotContainsString('#i-facebook', $html);
-        $this->assertStringNotContainsString('id="sideMascot"', $html);   // mascot hidden when nothing to show
+        // the corner mascot's quick actions are unrelated to social links
+        $this->assertStringContainsString('data-label="Calculator"', $html);
+    }
+
+    public function test_corner_mascot_shows_quick_actions(): void
+    {
+        $html = $this->get('/')->assertOk()->getContent();
+
+        $this->assertStringContainsString('id="fab"', $html);
+        $this->assertStringContainsString('href="https://wa.me/', $html);
+        $this->assertStringContainsString('data-label="Contact"', $html);
+        $this->assertStringContainsString('data-label="Branches"', $html);
+        $this->assertStringContainsString('data-label="Calculator"', $html);
+        $this->assertStringContainsString('href="'.url('/#calculator').'"', $html);
     }
 
     public function test_normalize_url_helper(): void
@@ -224,6 +237,45 @@ class PublicSiteTest extends TestCase
 
         // same values on the dedicated Contact page — one source of truth
         $this->get('/contact')->assertOk()->assertSee('reception@example.test');
+    }
+
+    public function test_homepage_content_is_admin_driven(): void
+    {
+        // section text via the Home Page settings
+        \App\Support\Settings::put('home', 'home.about.heading', 'A Very Custom About Heading');
+        \App\Support\Settings::put('home', 'home.why.cards', [
+            ['num' => '09', 'icon' => 'star', 'title' => 'Custom Why Card', 'text' => 'body text here'],
+        ]);
+
+        // testimonials + faqs come from their own tables
+        \App\Models\Testimonial::query()->delete();
+        \App\Models\Testimonial::create(['name' => 'Zoya Test', 'location' => 'Kochi', 'quote' => 'A custom testimonial quote.', 'rating' => 4]);
+        \App\Models\Faq::query()->delete();
+        \App\Models\Faq::create(['question' => 'A custom question?', 'answer' => '<p>A custom answer.</p>']);
+
+        $html = $this->get('/')->assertOk()->getContent();
+
+        $this->assertStringContainsString('A Very Custom About Heading', $html);
+        $this->assertStringContainsString('Custom Why Card', $html);
+        $this->assertStringContainsString('Zoya Test', $html);
+        $this->assertStringContainsString('A custom testimonial quote.', $html);
+        $this->assertSame(1, substr_count($html, 'class="tslide"'));   // only the one testimonial
+        $this->assertStringContainsString('A custom question?', $html);
+        $this->assertSame(1, substr_count($html, 'class="acc"'));      // only the one faq
+    }
+
+    public function test_homepage_product_and_investment_cards_auto_sync_from_pages(): void
+    {
+        $products = \App\Models\Page::published()->childrenOf('products')->get();
+        $html = $this->get('/')->assertOk()->getContent();
+
+        $this->assertSame($products->count(), substr_count($html, 'card product'));
+        foreach ($products as $p) {
+            $this->assertStringContainsString('>'.e($p->title).'</h3>', $html);
+        }
+        // unpublishing a product page drops its homepage card
+        $products->first()->update(['is_published' => false]);
+        $this->assertSame($products->count() - 1, substr_count($this->get('/')->getContent(), 'card product'));
     }
 
     public function test_homepage_news_section_is_driven_by_news_items(): void

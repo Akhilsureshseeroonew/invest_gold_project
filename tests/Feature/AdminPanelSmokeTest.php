@@ -35,9 +35,14 @@ class AdminPanelSmokeTest extends TestCase
             '/admin/policies/create',
             '/admin/interest-rate-schemes',
             '/admin/interest-rate-schemes/create',
+            '/admin/testimonials',
+            '/admin/testimonials/create',
+            '/admin/faqs',
+            '/admin/faqs/create',
             '/admin/enquiries',
             '/admin/job-applications',
             '/admin/manage-site-settings',
+            '/admin/manage-homepage',
         ]);
     }
 
@@ -80,6 +85,8 @@ class AdminPanelSmokeTest extends TestCase
             '/admin/branches/%d/edit'               => \App\Models\Branch::class,
             '/admin/policies/%d/edit'               => \App\Models\Policy::class,
             '/admin/interest-rate-schemes/%d/edit'  => \App\Models\InterestRateScheme::class,
+            '/admin/testimonials/%d/edit'           => \App\Models\Testimonial::class,
+            '/admin/faqs/%d/edit'                   => \App\Models\Faq::class,
             '/admin/enquiries/%d'                   => \App\Models\Enquiry::class,
             '/admin/job-applications/%d'            => \App\Models\JobApplication::class,
         ];

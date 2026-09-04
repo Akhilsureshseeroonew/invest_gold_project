@@ -94,21 +94,22 @@
     </div>
 </footer>
 
-{{-- ================= FLOATING MASCOT — SOCIAL LINKS ================= --}}
-@php $socialLinks = \App\Support\Site::socialLinks(); @endphp
+{{-- ================= FLOATING MASCOT — QUICK ACTIONS ================= --}}
+@php $waNumber = preg_replace('/\D+/', '', (string) config('site.whatsapp')); @endphp
 <div class="fab" id="fab">
-    @if (! empty($socialLinks))
-        <div class="fab__panel">
-            @foreach ($socialLinks as $social)
-                <a class="fab__item" href="{{ $social['url'] }}" target="_blank" rel="noopener"
-                   data-label="{{ $social['label'] }}" aria-label="{{ $social['label'] }}">
-                    <svg><use href="#i-{{ $social['key'] }}"/></svg>
-                </a>
-            @endforeach
-        </div>
-    @endif
-    <button class="fab__btn" id="fabBtn" type="button" aria-expanded="false"
-            aria-label="{{ ! empty($socialLinks) ? 'Show social links' : 'Invest Gold mascot' }}">
+    <div class="fab__panel">
+        @if ($waNumber)
+            <a class="fab__item fab__item--wa" href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener"
+               data-label="WhatsApp" aria-label="Chat on WhatsApp"><svg><use href="#i-whatsapp"/></svg></a>
+        @endif
+        <a class="fab__item" href="{{ url('/contact') }}" data-label="Contact" aria-label="Contact us">
+            <svg><use href="#i-mail"/></svg></a>
+        <a class="fab__item" href="{{ url('/branches') }}" data-label="Branches" aria-label="Find a branch">
+            <svg><use href="#i-pin"/></svg></a>
+        <a class="fab__item" href="{{ url('/#calculator') }}" data-label="Calculator" aria-label="Open the calculator">
+            <svg><use href="#i-calc"/></svg></a>
+    </div>
+    <button class="fab__btn" id="fabBtn" type="button" aria-expanded="false" aria-label="Quick actions">
         <span class="fab__pulse" aria-hidden="true"></span>
         <canvas id="scrollAnimCanvas" class="fab__canvas" width="120" height="250"></canvas>
         <img class="fab__fallback" src="{{ asset('assets/img/mascot.png') }}" alt="" loading="lazy" decoding="async">

@@ -66,7 +66,13 @@ return [
 
     // Calculator defaults (calculator.html / home calculator panel)
     'calculator' => [
-        'gold_rate_per_gram'    => 9200,
+        // Gold rate per gram by karat (₹). Indicative — set today's published
+        // branch rate for each in admin (Site Settings → Calculator defaults).
+        'gold_rate_24k' => 10040,
+        'gold_rate_22k' => 9200,
+        'gold_rate_21k' => 8790,
+        'gold_rate_18k' => 7530,
+
         'max_ltv_percent'       => 75,
         'default_interest_pa'   => 12,   // gold loan calculator
         'default_tenure_months' => 12,
@@ -75,5 +81,10 @@ return [
         'personal_loan_rate' => 16,
         'mahila_loan_rate'   => 14,
         'consumer_loan_rate' => 18,
+
+        // Investment calculator — indicative return rate p.a. (compounded yearly)
+        'ncd_rate'               => 10,   // Non-Convertible Debentures
+        'subordinated_debt_rate' => 11,   // Subordinated Debt
+        'doubling_years'         => 7,    // Doubling Sub-Debt Scheme — years to 2×
     ],
 ];
