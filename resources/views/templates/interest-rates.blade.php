@@ -36,7 +36,10 @@
                                     @endif
                                     <tbody>
                                         @foreach ($scheme->rows ?? [] as $row)
-                                            <tr>@foreach ((array) $row as $cell)<td>{{ $cell }}</td>@endforeach</tr>
+                                            <tr>@foreach ((array) $row as $cellKey => $cell)
+                                                @continue($cellKey === 'cells' && is_array($cell))
+                                                <td>{{ is_array($cell) ? '' : $cell }}</td>
+                                            @endforeach</tr>
                                         @endforeach
                                     </tbody>
                                 </table>
