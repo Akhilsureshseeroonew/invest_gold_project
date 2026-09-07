@@ -46,6 +46,9 @@ RUN apt-get update && apt-get install -y \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
+# Raise PHP upload limits (hero background-video uploads in the admin panel)
+COPY docker/php/uploads.ini /usr/local/etc/php/conf.d/zz-uploads.ini
+
 # Install Composer 2
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 

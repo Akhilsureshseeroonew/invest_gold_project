@@ -6,6 +6,7 @@ use App\Support\Homepage;
 use App\Support\Settings;
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
@@ -37,6 +38,7 @@ class ManageHomepage extends Page implements HasForms
         'hero__eyebrow' => 'hero.eyebrow',
         'hero__heading' => 'hero.heading',
         'hero__lead' => 'hero.lead',
+        'hero__video' => 'hero.video',
         'hero__cta1_label' => 'hero.cta1_label',
         'hero__cta1_url' => 'hero.cta1_url',
         'hero__cta2_label' => 'hero.cta2_label',
@@ -120,6 +122,15 @@ class ManageHomepage extends Page implements HasForms
                             TextInput::make('hero__cta2_label')->label('Button 2 label'),
                             TextInput::make('hero__cta2_url')->label('Button 2 link'),
                         ]),
+                        FileUpload::make('hero__video')
+                            ->label('Background video')
+                            ->helperText('Silent looping video behind the hero text. MP4 (H.264) works everywhere. Max 60 MB, but a compressed 5–10 MB clip is strongly recommended so the page loads fast. Leave empty to use the bundled default.')
+                            ->acceptedFileTypes(['video/mp4', 'video/webm'])
+                            ->maxSize(61440)
+                            ->disk('public')
+                            ->directory('home/hero')
+                            ->visibility('public')
+                            ->columnSpanFull(),
                     ]),
 
                     Tabs\Tab::make('About')->schema([

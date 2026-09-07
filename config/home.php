@@ -19,6 +19,10 @@ return [
         'cta1_url'   => '/contact',
         'cta2_label' => 'Explore Services',
         'cta2_url'   => '/products',
+        // Background video override. Empty = use the bundled default
+        // (public/assets/video/ig-hero.mp4). Upload a replacement in
+        // Content → Home Page → Hero.
+        'video'      => '',
     ],
 
     'about' => [

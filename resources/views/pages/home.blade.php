@@ -9,6 +9,12 @@
 @section('content')
       <!-- ================= 03. HERO ================= -->
       <section class="hero" id="home">
+        @php
+          $heroVideo = \App\Support\Assets::url(
+            ($home['hero']['video'] ?? null) ?: null,
+            asset('assets/video/ig-hero.mp4'),
+          );
+        @endphp
         <video
           class="hero__video"
           autoplay
@@ -19,7 +25,7 @@
           poster="{{ asset('assets/img/mascot.png') }}"
           aria-hidden="true"
         >
-          <source src="{{ asset('assets/video/ig-hero.mp4') }}" type="video/mp4" />
+          <source src="{{ $heroVideo }}" type="video/mp4" />
         </video>
         <div class="hero__video-overlay" aria-hidden="true"></div>
         <div class="container hero__inner">

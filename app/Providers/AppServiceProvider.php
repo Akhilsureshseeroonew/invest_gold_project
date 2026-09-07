@@ -16,6 +16,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Allow larger admin uploads (hero background video). Livewire's default
+        // temporary-upload cap is 12 MB; raise it to 60 MB. The server's PHP
+        // limits (docker/php/uploads.ini) and the FileUpload field's own
+        // ->maxSize() are set above this so this is the effective ceiling.
+        config(['livewire.temporary_file_upload.rules' => ['required', 'file', 'max:61440']]);
+
         $this->overrideSiteConfig();
         $this->shareNavigation();
     }
