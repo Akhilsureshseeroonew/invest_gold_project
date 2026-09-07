@@ -43,6 +43,7 @@ class AdminPanelSmokeTest extends TestCase
             '/admin/job-applications',
             '/admin/manage-site-settings',
             '/admin/manage-homepage',
+            '/admin/profile',
         ]);
     }
 

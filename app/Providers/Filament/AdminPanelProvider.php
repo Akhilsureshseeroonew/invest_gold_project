@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->profile()
             ->brandName('Invest Gold Finance')
             ->brandLogo(fn () => asset('assets/img/logo.png'))
             ->brandLogoHeight('1.9rem')
